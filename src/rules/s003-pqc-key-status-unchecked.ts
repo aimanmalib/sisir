@@ -3,6 +3,9 @@ import { asLowLevelCall, callsPrecompile, destinationOf, readSlot, type Destinat
 import { bodyRule } from './body-rule.js';
 import { qorechain } from './qorechain.js';
 import type { DetailRef } from './text.js';
+import type { RuleContext } from './types.js';
+
+type Report = RuleContext['report'];
 
 const FN = 'pqcKeyStatus';
 const [REGISTERED, , , PROVEN] = qorechain.pqcKeyStatusFields;
@@ -32,6 +35,37 @@ function decodesOf(body: Node, data: string): Node[] {
   return out;
 }
 
+/** Number of types an abi.decode call asks for. */
+function typeCount(decode: Node): number {
+  const types = decode.arguments[1] as Node | undefined;
+  return types?.type === 'TupleExpression' ? types.components.length : 1;
+}
+
+/**
+ * Judges every decode of one answer together: a field counts as read when any decode reads it, so a head-only
+ * decode followed by a full one is not flagged. Without a decode that reaches possessionProven, each short decode
+ * is reported; otherwise the first full decode carries the unread fields.
+ */
+function reportDecodes(body: Node, decodes: Node[], parentOf: ReadonlyMap<Node, Node>, report: Report): void {
+  const destOf = (d: Node): Destination | undefined => destinationOf(d, parentOf.get(d));
+  const short = decodes.filter((d) => typeCount(d) < 4);
+  const full = decodes.filter((d) => typeCount(d) >= 4);
+  if (!full.length) {
+    for (const d of short) report(d, { key: 'decodesFew', values: { count: typeCount(d), field: PROVEN as string } });
+    return;
+  }
+  // A full decode whose values go nowhere we can follow (returned, passed on) is not judged, as before.
+  const anchor = full.find((d) => destOf(d) !== undefined);
+  if (!anchor) return;
+  const read = (i: number): boolean =>
+    decodes.some((d) => {
+      const dest = typeCount(d) > i ? destOf(d) : undefined;
+      return dest !== undefined && readSlot(body, dest, i) !== undefined;
+    });
+  const fields = GUARDS.filter(([i]) => !read(i)).map(([, field]) => field as string);
+  if (fields.length) report(anchor, { key: fields.length > 1 ? 'unreadMany' : 'unreadOne', values: { fields } });
+}
+
 /** S003: a pqcKeyStatus result is used without reading both registered and possessionProven. */
 export const s003 = bodyRule('S003', ({ body, bindings, parentOf, report }) => {
   walk(body, (node) => {
@@ -47,15 +81,6 @@ export const s003 = bodyRule('S003', ({ body, bindings, parentOf, report }) => {
     if (!call || !callsPrecompile(call, FN, bindings)) return;
     const data = destinationOf(node, parentOf.get(node))?.slots[1];
     if (data === undefined) return;
-    for (const decode of decodesOf(body, data)) {
-      const types = decode.arguments[1] as Node | undefined;
-      const count = types?.type === 'TupleExpression' ? types.components.length : 1;
-      const dest = destinationOf(decode, parentOf.get(decode));
-      if (count < 4) report(decode, { key: 'decodesFew', values: { count, field: PROVEN as string } });
-      else if (dest) {
-        const detail = missing(body, dest);
-        if (detail) report(decode, detail);
-      }
-    }
+    reportDecodes(body, decodesOf(body, data), parentOf, report);
   });
 });

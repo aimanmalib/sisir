@@ -24,3 +24,8 @@ contract is a new deployment, listed here with its new address.
 - Static site image with nginx, a deploy script with rollback, and a health watch.
 - README, `AI_USAGE.md`, contributing guide, security policy, code of conduct, and decision records in
   `docs/decisions/`.
+
+### Fixed
+
+- S003 no longer flags a contract that decodes the raw `pqcKeyStatus` answer twice, for example the head first and
+  the full answer after. All decodes of one answer are now judged together.

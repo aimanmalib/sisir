@@ -52,9 +52,10 @@ Does not catch:
 - a result passed to another function that is expected to check it;
 - results stored in a struct or state variable and checked elsewhere.
 
-Known false positive: a contract that decodes the raw answer twice, for example once for the head only and once
-for the fields, is flagged on the decode that does not read both fields. Decoding once avoids it
-(see `contracts/src/SisirLedger.sol`).
+When the raw answer is decoded more than once, the decodes are judged together: a field counts as read if any
+decode reads it. A head-only decode of `registered` followed by a full decode that reads `possessionProven` is not
+flagged (`fixtures/rules/S003/negative-decode-twice.sol`). Short decodes are reported only when no decode reaches
+`possessionProven`.
 
 A result that is ignored entirely is not reported, because nothing trusts it.
 

@@ -23,6 +23,8 @@ active the call succeeds and returns no data.
   read as `possessionProven = true`. The forge test `test_legacyThreeValueAnswerIsRejected` failed before the check.
 - The key bytes are not read: `registered` and `possessionProven` are what the docs define as trust. A second decode
   for the key would also be flagged by Sisir's own S003, which expects every decode of the answer to read both fields.
+  (Later change: S003 now judges all decodes of one answer together, so a second decode is no longer flagged. The
+  single decode stays, because one decode is the simpler contract.)
 - No owner, no pause, no upgrade, no `payable`. Block number and timestamp are stored as `uint256` so the contract has
   no narrowing casts.
 - Compiler 0.8.28 (cancun), forge-std v1.16.2 as a submodule, both pinned in `contracts/foundry.toml` and
