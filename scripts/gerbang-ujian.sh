@@ -73,6 +73,14 @@ step "unit tests"; strict vitest "vitest" npx --no-install vitest run
 step "cli smoke"
 node dist/cli.js --version >/dev/null || fail "dist/cli.js does not run"
 
+# The playground in web/ bundles the same rule engine (src/rules) and has its own lockfile.
+if [ -f web/package.json ]; then
+  [ -d web/node_modules ] || { step "web npm ci"; (cd web && npm ci --no-audit --no-fund) >"$tmp/web-npm.log" 2>&1 || { tail -n 30 "$tmp/web-npm.log"; fail "web npm ci failed"; }; }
+  step "web typecheck"; (cd web && npx --no-install tsc --noEmit) || fail "web typecheck failed"
+  step "web tests";     strict vitest "web vitest" npm --prefix web exec --no -- vitest run
+  step "web build";     (cd web && npx --no-install vite build --logLevel warn) || fail "web build failed"
+fi
+
 if [ -f contracts/foundry.toml ]; then
   if ! forge --version 2>/dev/null | grep -q "Version: ${FOUNDRY_VERSION#v}"; then
     step "install foundry $FOUNDRY_VERSION"
