@@ -21,3 +21,26 @@ jobs:
           node-version-file: .nvmrc
       - run: npm ci
       - run: bash scripts/gerbang-ujian.sh
+
+  # Sisir lints its own contract through its own Action, then checks that the workshop draft fails it.
+  action:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    permissions:
+      contents: read
+      security-events: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./
+        with:
+          paths: contracts/src
+      - id: draft
+        uses: ./
+        with:
+          paths: fixtures/workshop
+          upload-sarif: 'false'
+          fail-on-error: 'false'
+      - name: The workshop draft has error-level findings
+        env:
+          CODE: ${{ steps.draft.outputs.exit-code }}
+        run: test "$CODE" = 1
