@@ -1,0 +1,18 @@
+# Test gate on Depot CI. Generated from a shared template; comments removed so tracked files stay in English.
+name: gerbang
+on: workflow_dispatch
+jobs:
+  gerbang:
+    runs-on: depot-ubuntu-24.04-4
+    timeout-minutes: 30
+    env:
+      NO_COLOR: "1"
+      CI: "1"
+      TERM: dumb
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - run: npm ci
+      - run: bash scripts/gerbang-ujian.sh
