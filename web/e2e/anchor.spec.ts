@@ -79,3 +79,34 @@ test("declining in the wallet sends nothing and says so", async ({ page }) => {
   await expect(ledger.getByRole("alert")).toContainText("You declined in the wallet");
   expect(chain.nativeTxs).toHaveLength(0);
 });
+
+/** Where the dialog box sits against the viewport, and whether the page scrolls sideways. */
+async function dialogFit(page: Page) {
+  const box = await page.locator('[data-rk] [role="dialog"] [role="document"] > div > div').first().boundingBox();
+  const overflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
+  return { left: box?.x ?? -1, right: (box?.x ?? 0) + (box?.width ?? 0), overflow };
+}
+
+test.describe("on a 320 px window with a desktop browser", () => {
+  test.use({ viewport: { width: 320, height: 640 } });
+
+  test("the wallet dialogs fit the screen", async ({ page }) => {
+    await open(page, "current");
+    const ledger = page.getByRole("region", { name: "Anchor this report" });
+    await ledger.getByRole("button", { name: "Connect QoreX" }).scrollIntoViewIfNeeded();
+    await ledger.getByRole("button", { name: "Connect QoreX" }).click();
+    await expect(page.getByTestId("rk-wallet-option-qorex")).toBeVisible();
+    const connectFit = await dialogFit(page);
+    expect(connectFit.left, "connect dialog left edge").toBeGreaterThanOrEqual(0);
+    expect(connectFit.right, "connect dialog right edge").toBeLessThanOrEqual(320);
+    expect(connectFit.overflow).toBe(0);
+
+    await page.getByTestId("rk-wallet-option-qorex").click();
+    await ledger.getByRole("button", { name: /^Connected: / }).click();
+    await expect(page.getByRole("button", { name: "Disconnect" })).toBeVisible();
+    const accountFit = await dialogFit(page);
+    expect(accountFit.left, "account dialog left edge").toBeGreaterThanOrEqual(0);
+    expect(accountFit.right, "account dialog right edge").toBeLessThanOrEqual(320);
+    expect(accountFit.overflow).toBe(0);
+  });
+});

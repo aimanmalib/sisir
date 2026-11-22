@@ -33,3 +33,5 @@ contract is a new deployment, listed here with its new address.
   names are now skipped only inside a toolchain root (a folder with `foundry.toml`, `hardhat.config.*`,
   `truffle-config.js` or `package.json`). `node_modules` and `.git` are still skipped everywhere. The lists live in
   `src/cli/walk.json`.
+- The wallet dialogs in the playground now fit a 320 px browser window on a computer. RainbowKit gave such a window its
+  desktop dialog, at least 368 px wide, so the right side was cut off. Phones keep RainbowKit's bottom sheet unchanged.
