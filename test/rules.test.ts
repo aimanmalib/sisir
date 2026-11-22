@@ -27,8 +27,8 @@ function linesFor(id: string, name: string, source: string): number[] {
 }
 
 describe('rule registry', () => {
-  it('ships S001 to S004 in id order, each with a catalog entry', () => {
-    expect(SHIPPED.slice(0, 4)).toEqual(['S001', 'S002', 'S003', 'S004']);
+  it('ships S001 to S008 in id order, each with a catalog entry', () => {
+    expect(SHIPPED).toEqual(['S001', 'S002', 'S003', 'S004', 'S005', 'S006', 'S007', 'S008']);
     expect([...SHIPPED].sort()).toEqual(SHIPPED);
     for (const id of SHIPPED) expect(catalog.get(id), id).toBeDefined();
   });
@@ -89,6 +89,46 @@ describe('finding text', () => {
   });
 });
 
+describe('finding text for S005 to S008', () => {
+  const BRIDGE = '0x0000000000000000000000000000000000000901';
+  const found = (src: string) => lintSource(src, { file: 'a.sol', rules }).findings.map((f) => [f.ruleId, f.message]);
+
+  it('S005 names the call kind the bridge refuses', () => {
+    const src = `contract A { function f(bytes calldata m) external view { (bool ok, ) = address(${BRIDGE}).staticcall(m); require(ok); } }`;
+    expect(found(src)).toEqual([['S005', expect.stringMatching(/It uses staticcall, which the bridge refuses\.$/)]]);
+  });
+
+  it('S006 names the unchecked parameter', () => {
+    const src = `contract A { function f(string calldata note) external {
+      (bool ok, bytes memory r) = address(${BRIDGE}).call(bytes(string.concat('{"n":"', note, '"}'))); require(ok && r.length > 0);
+    } }`;
+    expect(found(src)).toEqual([['S006', expect.stringMatching(/The parameter note is not checked in this function\.$/)]]);
+  });
+
+  it('S007 lists only what the message leaves out', () => {
+    const src = `contract A { uint256 n; function f(bytes calldata k, bytes calldata s) external {
+      require(P.pqcVerify(k, s, abi.encode(block.chainid, n))); n++;
+    } }`;
+    expect(found(src)).toEqual([['S007', expect.stringMatching(/It leaves out address\(this\)\.$/)]]);
+  });
+
+  it('S007 counts a nonce stored with an initial value', () => {
+    const src = `contract A { uint256 public nonce = 1; function f(bytes calldata k, bytes calldata s) external {
+      require(P.pqcVerify(k, s, abi.encode(block.chainid, address(this), nonce))); nonce += 1;
+    } }`;
+    expect(found(src)).toEqual([]);
+  });
+
+  it('S008 names the precompile and leaves value to the bridge to S005', () => {
+    const src = `contract A { function f() external payable {
+      payable(address(0x0000000000000000000000000000000000000a02)).transfer(1);
+      (bool ok, ) = address(${BRIDGE}).call{value: 1}(""); require(ok);
+    } }`;
+    expect(found(src).map(([id]) => id)).toEqual(['S008', 'S005']);
+    expect(found(src)[0]?.[1]).toMatch(/It sends value to pqcKeyStatus\.$/);
+  });
+});
+
 describe('qorechain.json', () => {
   it('lists the precompiles the rules depend on, by lowercase address', () => {
     const names = [...qorechain.precompiles.values()];
@@ -99,5 +139,13 @@ describe('qorechain.json', () => {
   it('refuses a mixed-case address and a short field list', () => {
     expect(() => loadQoreChain({ precompiles: { x: '0x0000000000000000000000000000000000000A01' }, pqcKeyStatusFields: ['a', 'b', 'c', 'd'] })).toThrow(/lowercase/);
     expect(() => loadQoreChain({ precompiles: {}, pqcKeyStatusFields: ['a'] })).toThrow(/four/);
+  });
+
+  it('needs the bridge entry and the name of its function', () => {
+    const fields = ['a', 'b', 'c', 'd'];
+    expect(() => loadQoreChain({ precompiles: {}, pqcKeyStatusFields: fields })).toThrow(/crossVmBridge/);
+    const precompiles = { crossVmBridge: '0x0000000000000000000000000000000000000901' };
+    expect(() => loadQoreChain({ precompiles, pqcKeyStatusFields: fields, crossVmBridgeFunction: 'bad name' })).toThrow(/function name/);
+    expect(qorechain.bridgeFunction).toBe('executeCrossVMCall');
   });
 });

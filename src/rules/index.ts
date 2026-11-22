@@ -2,6 +2,10 @@ import { s001 } from './s001-precompile-address-case.js';
 import { s002 } from './s002-precompile-empty-return.js';
 import { s003 } from './s003-pqc-key-status-unchecked.js';
 import { s004 } from './s004-pqc-verify-result-ignored.js';
+import { s005 } from './s005-bridge-call-kind.js';
+import { s006 } from './s006-bridge-payload-concat.js';
+import { s007 } from './s007-pqc-message-unbound.js';
+import { s008 } from './s008-value-to-precompile.js';
 import type { Rule } from './types.js';
 
 export { catalog, loadCatalog } from './catalog.js';
@@ -11,4 +15,4 @@ export { loadQoreChain, qorechain } from './qorechain.js';
 export type * from './types.js';
 
 /** Every shipped rule, in id order. Each rule lives in its own file next to this one. */
-export const rules: readonly Rule[] = [s001, s002, s003, s004];
+export const rules: readonly Rule[] = [s001, s002, s003, s004, s005, s006, s007, s008];
