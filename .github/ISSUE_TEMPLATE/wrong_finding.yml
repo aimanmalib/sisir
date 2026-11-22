@@ -1,0 +1,35 @@
+name: Wrong or missed finding
+description: Sisir flags code that is fine, or misses a QoreChain mistake that one of its rules should catch
+labels: [rules]
+body:
+  - type: dropdown
+    id: kind
+    attributes:
+      label: What kind?
+      options: [A finding on code that is fine (false positive), A missed mistake (false negative)]
+    validations:
+      required: true
+  - type: input
+    id: rule
+    attributes:
+      label: Rule id (S001 to S008)
+    validations:
+      required: true
+  - type: textarea
+    id: code
+    attributes:
+      label: The smallest Solidity that shows it
+      description: Your own code or a minimal example. Please do not paste other people's contracts without permission.
+      render: solidity
+    validations:
+      required: true
+  - type: textarea
+    id: why
+    attributes:
+      label: Why the result is wrong, with a link to the QoreChain docs if you have one
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Output of `sisir --version`, or the commit
