@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { catalog, lintSource, loadCatalog, rules } from '../src/rules/index.js';
+import type { Rule } from '../src/rules/types.js';
 import { contractRule, functionRule, testCatalog, testRules } from './helpers.js';
 
 const SOURCE = `pragma solidity ^0.8.24;
@@ -41,6 +42,12 @@ describe('lintSource', () => {
   it('finds nothing when no rule matches', () => {
     const result = lintSource('contract Other {}', { file: 'b.sol', rules: [contractRule, functionRule], catalog: testCatalog });
     expect(result).toEqual({ file: 'b.sol', findings: [] });
+  });
+
+  it('reports a node once even though the parser stores a state variable value twice', () => {
+    const literalRule: Rule = { id: 'T003', create: (ctx) => ({ NumberLiteral: (n) => ctx.report(n) }) };
+    const result = lintSource('contract A { uint256 constant X = 7; }', { file: 'a.sol', rules: [literalRule], catalog: testCatalog });
+    expect(result.findings.map((f) => [f.ruleId, f.line, f.column])).toEqual([['T003', 1, 35]]);
   });
 });
 

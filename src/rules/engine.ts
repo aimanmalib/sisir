@@ -55,6 +55,9 @@ export function lintSource(source: string, options: LintOptions): FileResult {
     throw e;
   }
   const findings: Finding[] = [];
+  // The parser stores a state variable's value twice (variables[].expression and initialValue),
+  // so a visitor can see the same node twice. One finding per rule, place and message.
+  const seen = new Set<string>();
   const visitors = rules.map((rule) => {
     const entry = catalog.get(rule.id);
     if (!entry) throw new Error(`rule ${rule.id} is not in the catalog`);
@@ -63,6 +66,9 @@ export function lintSource(source: string, options: LintOptions): FileResult {
       source,
       report(node, detail) {
         const loc = node.loc ?? { start: { line: 1, column: 0 }, end: { line: 1, column: 0 } };
+        const key = [entry.id, loc.start.line, loc.start.column, loc.end.line, loc.end.column, detail ?? ''].join(':');
+        if (seen.has(key)) return;
+        seen.add(key);
         findings.push({
           ruleId: entry.id,
           level: entry.level,

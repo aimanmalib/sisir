@@ -53,7 +53,7 @@ export interface Report {
 export interface RuleContext {
   file: string;
   source: string;
-  report(node: ASTNode, detail?: string): void;
+  report(node: { loc?: ASTNode['loc'] | undefined }, detail?: string): void;
 }
 
 /** A rule only walks the AST. Text, level and docs come from the catalog. */
