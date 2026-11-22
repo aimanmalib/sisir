@@ -104,6 +104,7 @@
     "opening": "Waiting for QoreX…",
     "windowOpen": "Window open for {account}.",
     "shieldLabel": "ML-DSA-87 layer: {state}",
+    "windowOther": "QoreX connected the EVM address {evm}. It has a different key from the native account, so this window does not cover it.",
     "step3": "Anchor",
     "step3Hint": "This calls SisirLedger.anchor with the two hashes and the findings count.",
     "send": "Anchor this report",

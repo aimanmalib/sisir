@@ -58,7 +58,7 @@ function StepError({ step }: { step: StepState<unknown> }) {
 /** "Anchor this report": the report slip, then connect, open a window, anchor. */
 export function AnchorPanel({ digest, fileName, reason, ledger }: AnchorDockProps & { ledger: `0x${string}` | null }) {
   const { t } = useI18n();
-  const { isConnected, chainId } = useAccount();
+  const { isConnected, chainId, address } = useAccount();
   const { windowStep, anchorStep, openWindow, anchor } = useAnchor(digest, ledger);
   const onChain = isConnected && chainId === config.chain.id;
   const live = ledger !== null && digest !== null;
@@ -119,7 +119,7 @@ export function AnchorPanel({ digest, fileName, reason, ledger }: AnchorDockProp
           hint={t('anchor.step2Hint', { txs: a.windowMaxTxs, blocks: a.windowBlocks })}
           state={windowDone ? 'done' : onChain ? 'now' : 'todo'}
         >
-          <button type="button" className="btn btn--primary" onClick={() => void openWindow()} disabled={!live || !onChain || windowStep.status === 'pending'}>
+          <button type="button" className={windowDone ? 'btn' : 'btn btn--primary'} onClick={() => void openWindow()} disabled={!live || !onChain || windowStep.status === 'pending'}>
             {windowStep.status === 'pending' ? t('anchor.opening') : t('anchor.open')}
           </button>
           {windowStep.status === 'done' ? (
@@ -129,10 +129,13 @@ export function AnchorPanel({ digest, fileName, reason, ledger }: AnchorDockProp
               <code title={windowStep.receipt.txHash}>{t('anchor.tx', { hash: short(windowStep.receipt.txHash) })}</code>
             </p>
           ) : null}
+          {windowStep.status === 'done' && address && windowStep.receipt.account.toLowerCase() !== address.toLowerCase() ? (
+            <p className="step__aside">{t('anchor.windowOther', { evm: short(address) })}</p>
+          ) : null}
           <StepError step={windowStep} />
         </Step>
         <Step n={3} title={t('anchor.step3')} hint={t('anchor.step3Hint')} state={anchorStep.status === 'done' ? 'done' : windowDone ? 'now' : 'todo'}>
-          <button type="button" className="btn btn--primary" onClick={() => void anchor()} disabled={!live || !onChain || !windowDone || anchorStep.status === 'pending'}>
+          <button type="button" className={anchorStep.status === 'done' ? 'btn' : 'btn btn--primary'} onClick={() => void anchor()} disabled={!live || !onChain || !windowDone || anchorStep.status === 'pending'}>
             {anchorStep.status === 'pending' ? t('anchor.sending') : t('anchor.send')}
           </button>
           {anchorStep.status === 'done' ? (

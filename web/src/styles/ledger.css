@@ -156,6 +156,7 @@
 }
 
 .step__title {
+  margin: 0;
   font-size: var(--step-0);
   font-weight: 700;
   color: var(--on-bench);
@@ -175,6 +176,12 @@
 
 .step__ok {
   color: var(--green-on-bench);
+}
+
+.step__aside {
+  max-width: 62ch;
+  color: var(--on-bench-soft);
+  font-size: var(--step--1);
 }
 
 .step__error {
@@ -251,5 +258,16 @@
   .ledger__grid {
     grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr);
     gap: var(--space-6);
+  }
+}
+
+@media (max-width: 30rem) {
+  /* Narrow phones: the label sits above its value so a hash or file name keeps its width. */
+  .slip__row {
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--space-1);
+  }
+  .step {
+    grid-template-columns: minmax(0, 1fr);
   }
 }

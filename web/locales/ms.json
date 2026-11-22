@@ -104,6 +104,7 @@
     "opening": "Menunggu QoreX…",
     "windowOpen": "Window dibuka untuk {account}.",
     "shieldLabel": "Lapisan ML-DSA-87: {state}",
+    "windowOther": "QoreX menyambung alamat EVM {evm}. Alamat itu memakai kunci berbeza daripada akaun natif, jadi window ini tidak meliputinya.",
     "step3": "Sauh",
     "step3Hint": "Ini memanggil SisirLedger.anchor dengan dua cincangan dan bilangan dapatan.",
     "send": "Sauhkan laporan ini",

@@ -6,6 +6,7 @@ import { WagmiProvider } from 'wagmi';
 import type { ReportDigest } from '@sisir/report';
 import { AnchorPanel } from '../components/AnchorPanel.js';
 import { RecentAnchors } from '../components/RecentAnchors.js';
+import { useI18n } from '../i18n/i18n.js';
 import { config as wagmiConfig } from '../wagmi.js';
 import { ledgerAddress } from './ledger.js';
 
@@ -30,11 +31,12 @@ export default function AnchorDock(props: AnchorDockProps) {
   const [theme] = useState(() =>
     darkTheme({ accentColor: token('--manila', 'goldenrod'), accentColorForeground: token('--manila-ink', 'black'), borderRadius: 'small' }),
   );
+  const { lang } = useI18n();
   const ledger = ledgerAddress();
   return (
     <WagmiProvider config={wagmiConfig}>
       <QueryClientProvider client={queryClient}>
-        <RainbowKitProvider theme={theme}>
+        <RainbowKitProvider theme={theme} locale={lang === 'ms' ? 'ms-MY' : 'en-US'}>
           <div className="ledger__grid">
             <AnchorPanel {...props} ledger={ledger} />
             <RecentAnchors ledger={ledger} />
