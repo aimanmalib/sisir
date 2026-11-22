@@ -77,7 +77,7 @@ node dist/cli.js --version >/dev/null || fail "dist/cli.js does not run"
 if [ -f web/package.json ]; then
   [ -d web/node_modules ] || { step "web npm ci"; (cd web && npm ci --no-audit --no-fund) >"$tmp/web-npm.log" 2>&1 || { tail -n 30 "$tmp/web-npm.log"; fail "web npm ci failed"; }; }
   step "web typecheck"; (cd web && npx --no-install tsc --noEmit) || fail "web typecheck failed"
-  step "web tests";     strict vitest "web vitest" npm --prefix web exec --no -- vitest run
+  step "web tests";     strict vitest "web vitest" env -C web npx --no-install vitest run
   step "web build";     (cd web && npx --no-install vite build --logLevel warn) || fail "web build failed"
 fi
 
