@@ -1,0 +1,12 @@
+{
+  "source": "https://docs.qorechain.io/developer-guide/evm-precompiles",
+  "precompiles": {
+    "crossVmBridge": "0x0000000000000000000000000000000000000901",
+    "pqcVerify": "0x0000000000000000000000000000000000000a01",
+    "pqcKeyStatus": "0x0000000000000000000000000000000000000a02",
+    "aiRiskScore": "0x0000000000000000000000000000000000000b01",
+    "aiAnomalyCheck": "0x0000000000000000000000000000000000000b02",
+    "prismConsensusParams": "0x0000000000000000000000000000000000000c01"
+  },
+  "pqcKeyStatusFields": ["registered", "algorithmId", "pubkey", "possessionProven"]
+}
