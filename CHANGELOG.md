@@ -26,6 +26,8 @@ contract is a new deployment, listed here with its new address.
   `docs/decisions/`.
 - Link preview card `web/public/og.png` (1200 x 630), drawn by `scripts/og-image.mjs` from the default language's
   title and description, the colour tokens and the logo. The address and card size live in `config/app.json` `site`.
+- The page head now names the share card: title, description, Open Graph and Twitter tags are filled at build time
+  from `config/app.json` `site` and the default language's `meta` text. The image URL carries a hash of the card.
 
 ### Fixed
 

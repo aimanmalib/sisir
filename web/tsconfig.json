@@ -34,6 +34,7 @@
     "e2e",
     "playwright.config.ts",
     "vite.config.ts",
+    "meta-head.ts",
     "vitest.config.ts"
   ]
 }

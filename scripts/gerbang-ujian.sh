@@ -80,6 +80,18 @@ if [ -f web/package.json ]; then
   step "web typecheck"; (cd web && npx --no-install tsc --noEmit) || fail "web typecheck failed"
   step "web tests";     strict vitest "web vitest" env -C web npx --no-install vitest run
   step "web build";     (cd web && npx --no-install vite build --logLevel warn) || fail "web build failed"
+  # Link preview crawlers read only the static head: the built page must name the card, versioned by its hash.
+  step "web head"
+  node --input-type=module -e '
+    import { readFileSync } from "node:fs"; import { createHash } from "node:crypto";
+    const { site } = JSON.parse(readFileSync("config/app.json", "utf8"));
+    const html = readFileSync("web/dist/index.html", "utf8");
+    const card = readFileSync("web/dist" + site.ogImage);
+    const want = new URL(site.ogImage, site.url).href + "?v=" + createHash("sha256").update(card).digest("hex").slice(0, 8);
+    const og = html.match(/property="og:[^"]+"/g) ?? [];
+    if (!html.includes(`<meta property="og:image" content="${want}" />`)) throw new Error("og:image is not " + want);
+    if (og.length < 9 || !/name="twitter:card"/.test(html) || /__META_LANG__|meta-head/.test(html)) throw new Error("head is incomplete");
+    console.log(`${og.length} og tags, image ${want}`);' || fail "web/dist/index.html lacks the share card tags"
   # The anchor flow against the QoreX test double and a fake chain (web/e2e). CI installs the browser and its
   # system libraries; a developer machine reuses the browser Playwright already downloaded.
   if [ -d web/e2e ]; then

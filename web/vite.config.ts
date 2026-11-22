@@ -1,6 +1,7 @@
 import react from "@vitejs/plugin-react";
 import { fileURLToPath } from "node:url";
 import { defineConfig } from "vite";
+import { metaHead } from "./meta-head.js";
 
 // The public REST APIs send no CORS headers, so the browser reaches them
 // through the dev (and preview) server: /lcd-testnet and /lcd-mainnet are
@@ -25,8 +26,11 @@ export const alias = {
 };
 const repoRoot = fileURLToPath(new URL("..", import.meta.url));
 
+// index.html has markers instead of page text; metaHead fills the title, description and share card tags
+// from config/app.json and the default locale (see docs/decisions/0011-page-head.md).
+
 export default defineConfig({
-  plugins: [react()],
+  plugins: [react(), metaHead(repoRoot)],
   resolve: { alias },
   build: { target: "es2022" },
   server: { port: 5173, proxy, fs: { allow: [repoRoot] } },
