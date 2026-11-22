@@ -35,7 +35,7 @@ export function classifyAnchorError(error: unknown): AnchorErrorKind {
   const all = chain(error);
   for (const e of all) {
     const code = (e as { code?: unknown }).code;
-    if (code === 4001 || code === 'ACTION_REJECTED' || /user rejected|rejected by the user|request rejected/i.test(text(e))) {
+    if (code === 4001 || code === 'ACTION_REJECTED' || /user rejected|rejected by the user|request rejected|signature rejected/i.test(text(e))) {
       return 'rejected';
     }
     if (isQorexIntegrationError(e) && e.code === 'QOREX_NOT_INSTALLED') return 'notInstalled';

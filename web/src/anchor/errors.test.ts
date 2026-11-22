@@ -9,6 +9,8 @@ function wrapped(inner: unknown): Error {
 describe('anchor error kinds', () => {
   it('reads a user rejection through the cause chain', () => {
     expect(classifyAnchorError(wrapped({ code: 4001, message: 'User rejected the request.' }))).toBe('rejected');
+    // QoreX declines without a code.
+    expect(classifyAnchorError(new Error('QoreX: signature rejected'))).toBe('rejected');
   });
 
   it('tells QoreX refusing an EVM signing method apart from a chain refusal', () => {
