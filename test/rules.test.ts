@@ -119,6 +119,17 @@ describe('finding text for S005 to S008', () => {
     expect(found(src)).toEqual([]);
   });
 
+  it('S007 asks for a counter that changes outside the constructor', () => {
+    const counterless = (decl: string, body: string): string => `contract A { ${decl}
+      function f(uint256 c, bytes calldata k, bytes calldata s) external { ${body}
+        require(P.pqcVerify(k, s, abi.encode(block.chainid, address(this), c, nonce))); } }`;
+    const leftOut = [['S007', expect.stringMatching(/It leaves out a changing counter\.$/)]];
+    expect(found(counterless('uint256 nonce;', ''))).toEqual(leftOut);
+    expect(found(counterless('uint256 nonce; constructor() { nonce++; }', ''))).toEqual(leftOut);
+    expect(found(counterless('uint256 nonce;', 'c++; c += 1;'))).toEqual(leftOut);
+    expect(found(counterless('uint256 nonce;', 'nonce++;'))).toEqual([]);
+  });
+
   it('S008 names the precompile and leaves value to the bridge to S005', () => {
     const src = `contract A { function f() external payable {
       payable(address(0x0000000000000000000000000000000000000a02)).transfer(1);
