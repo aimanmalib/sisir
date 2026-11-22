@@ -60,7 +60,7 @@ describe('deploy/uptime.sh: two failures in a row send one alert, recovery sends
 
   // Async on purpose: a synchronous spawn would block the event loop and the test server could not answer.
   const run = async () => {
-    const notify = join(dir, 'notify.sh');
+    const notify = join(dir, 'alert');
     if (!existsSync(notify)) {
       writeFileSync(notify, `#!/bin/sh\nprintf '%s|%s\\n' "$2" "$1" >> "${join(dir, 'sent')}"\n`);
       chmodSync(notify, 0o755);
