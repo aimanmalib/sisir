@@ -12,6 +12,9 @@ export { catalog, loadCatalog } from './catalog.js';
 export { compareFindings, lintSource } from './engine.js';
 export type { LintOptions } from './engine.js';
 export { loadQoreChain, qorechain } from './qorechain.js';
+export { languages, ruleText } from './i18n.js';
+export type { Language } from './i18n.js';
+export { placeholders, renderDetail, renderMessage } from './text.js';
 export type * from './types.js';
 
 /** Every shipped rule, in id order. Each rule lives in its own file next to this one. */

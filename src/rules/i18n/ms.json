@@ -1,0 +1,70 @@
+{
+  "rules": {
+    "S001": {
+      "message": "Alamat precompile QoreChain ini ditulis dengan huruf besar dan kecil bercampur.",
+      "fix": "Tulis alamat precompile dengan huruf kecil.",
+      "details": {
+        "pointsAt": "Ia menunjuk ke {name}."
+      }
+    },
+    "S002": {
+      "message": "Panggilan aras rendah ke precompile memakai data jawapan tanpa menyemak panjangnya. Precompile yang tidak aktif memulangkan berjaya dengan data kosong.",
+      "fix": "Semak bahawa data jawapan cukup panjang sebelum menyahkodnya, dan anggap data kosong sebagai kegagalan.",
+      "details": {
+        "callsTo": "Panggilan itu pergi ke {name}."
+      }
+    },
+    "S003": {
+      "message": "Hasil pqcKeyStatus dipakai tanpa menyemak kedua-dua registered dan possessionProven.",
+      "fix": "Wajibkan registered dan possessionProven sebelum mempercayai kunci itu.",
+      "details": {
+        "unreadOne": "{fields} tidak pernah dibaca.",
+        "unreadMany": "{fields} tidak pernah dibaca.",
+        "decodesFew": "Ia menyahkod {count} daripada 4 nilai pulangan, jadi {field} tidak pernah dibaca."
+      }
+    },
+    "S004": {
+      "message": "Nilai pulangan pqcVerify tidak disemak.",
+      "fix": "Wajibkan hasil pqcVerify bernilai true sebelum bertindak atas tandatangan itu.",
+      "details": {
+        "discarded": "Hasilnya dibuang.",
+        "storedUnread": "Hasilnya disimpan tetapi tidak pernah dibaca.",
+        "statusOnly": "Hanya status panggilan dibaca. Panggilan yang berjaya tidak bermakna tandatangan itu sah."
+      }
+    },
+    "S005": {
+      "message": "Jambatan rentas VM dipanggil dengan staticcall, delegatecall atau nilai.",
+      "fix": "Panggil jambatan dengan call biasa tanpa nilai.",
+      "details": {
+        "kind": "Ia memakai {kind}, yang ditolak oleh jambatan.",
+        "value": "Ia menghantar nilai, yang tidak diterima oleh jambatan."
+      }
+    },
+    "S006": {
+      "message": "Muatan jambatan dibina dengan menggabungkan parameter string atau bytes yang tidak disahkan oleh fungsi ini.",
+      "fix": "Sahkan atau lepaskan parameter itu dalam fungsi yang sama sebelum ia masuk ke dalam muatan.",
+      "details": {
+        "unchecked": "Parameter {name} tidak disemak dalam fungsi ini."
+      }
+    },
+    "S007": {
+      "message": "Mesej yang disemak oleh pqcVerify tidak mengikat block.chainid, address(this) atau pembilang yang berubah, jadi tandatangan boleh diulang tayang.",
+      "fix": "Masukkan block.chainid, address(this) dan nonce yang berubah setiap kali dipakai ke dalam mesej yang ditandatangani.",
+      "details": {
+        "leavesOut": "Ia tidak memasukkan {parts}."
+      },
+      "terms": {
+        "chainid": "block.chainid",
+        "self": "address(this)",
+        "counter": "pembilang yang berubah"
+      }
+    },
+    "S008": {
+      "message": "Nilai dihantar ke alamat precompile.",
+      "fix": "Jangan hantar nilai ke alamat precompile.",
+      "details": {
+        "valueTo": "Ia menghantar nilai ke {name}."
+      }
+    }
+  }
+}
