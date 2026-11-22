@@ -21,7 +21,6 @@ evidence/
 brand/
 docs/
 test/
-web/e2e/
 .depot
 .github
 .pagar
