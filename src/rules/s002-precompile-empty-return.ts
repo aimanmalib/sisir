@@ -23,6 +23,6 @@ export const s002 = bodyRule('S002', ({ body, bindings, parentOf, report }) => {
     const dest = destinationOf(node, parentOf.get(node));
     const data = dest?.slots[1];
     if (!dest || data === undefined || !isRead(body, data, dest.writers)) return;
-    if (!checksLength(body, data)) report(node, `The call goes to ${name}.`);
+    if (!checksLength(body, data)) report(node, { key: 'callsTo', values: { name } });
   });
 });

@@ -32,12 +32,13 @@ export const s007 = contractRule('S007', (scope) => {
       if (!message) return;
       const bound = messageBinding(message, fn, scope, counted);
       if (bound.opaque) return;
-      const missing = [
-        bound.chainid ? undefined : 'block.chainid',
-        bound.self ? undefined : 'address(this)',
-        bound.counter ? undefined : 'a changing counter',
+      // Keys into the catalog terms of S007, so the list can be rendered in any language.
+      const parts = [
+        bound.chainid ? undefined : 'chainid',
+        bound.self ? undefined : 'self',
+        bound.counter ? undefined : 'counter',
       ].filter((x): x is string => x !== undefined);
-      if (missing.length) scope.report(node, `It leaves out ${missing.slice(0, -1).join(', ')}${missing.length > 1 ? ' and ' : ''}${missing.at(-1)}.`);
+      if (parts.length) scope.report(node, { key: 'leavesOut', values: { parts } });
     });
   }
 });

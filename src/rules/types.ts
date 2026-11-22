@@ -1,15 +1,14 @@
 import type { ASTVisitor, ASTNode } from '@solidity-parser/parser/dist/src/ast-types.js';
+import type { DetailRef, RuleText } from './text.js';
 
 export type Level = 'error' | 'warning' | 'info';
 
 /** One rule as described in catalog.json. */
-export interface CatalogEntry {
+export interface CatalogEntry extends RuleText {
   id: string;
   name: string;
   level: Level;
   docs: string;
-  message: string;
-  fix: string;
 }
 
 export interface Position {
@@ -29,6 +28,8 @@ export interface Finding {
   message: string;
   fix: string;
   docs: string;
+  /** The detail as a key and values, so a front end can render it in another language. */
+  detail?: DetailRef;
 }
 
 /** A file that could not be parsed. */
@@ -53,7 +54,8 @@ export interface Report {
 export interface RuleContext {
   file: string;
   source: string;
-  report(node: { loc?: ASTNode['loc'] | undefined }, detail?: string): void;
+  /** `detail` is a key into the rule's catalog details; a plain string is English as written (tests only). */
+  report(node: { loc?: ASTNode['loc'] | undefined }, detail?: DetailRef | string): void;
 }
 
 /** A rule only walks the AST. Text, level and docs come from the catalog. */
@@ -62,4 +64,4 @@ export interface Rule {
   create(context: RuleContext): ASTVisitor;
 }
 
-export type { ASTNode, ASTVisitor };
+export type { ASTNode, ASTVisitor, DetailRef, RuleText };

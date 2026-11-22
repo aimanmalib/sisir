@@ -11,7 +11,7 @@ export const s001: Rule = {
       if (!/^0x[0-9a-fA-F]{40}$/.test(text) || !/[A-F]/.test(text)) return;
       const value = literalValue(text);
       const name = value === undefined ? undefined : qorechain.precompiles.get(value);
-      if (name) context.report(node, `It points at ${name}.`);
+      if (name) context.report(node, { key: 'pointsAt', values: { name } });
     },
   }),
 };

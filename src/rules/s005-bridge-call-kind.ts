@@ -11,7 +11,7 @@ export const s005 = bodyRule('S005', ({ body, bindings, report }) => {
     const low = asLowLevelCall(node);
     const toBridge = resolvePrecompile(call.target, bindings) === BRIDGE || (low && payloadFunction(low.payload) === qorechain.bridgeFunction);
     if (!toBridge) return;
-    if (low && low.kind !== 'call') return report(node, `It uses ${low.kind}, which the bridge refuses.`);
-    if (sentValue(call)) report(node, 'It sends value, which the bridge does not accept.');
+    if (low && low.kind !== 'call') return report(node, { key: 'kind', values: { kind: low.kind } });
+    if (sentValue(call)) report(node, { key: 'value' });
   });
 });

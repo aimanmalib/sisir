@@ -101,7 +101,7 @@ export const s006 = contractRule('S006', (scope) => {
       for (const arg of node.arguments as Node[]) {
         const name = argName(arg);
         if (name && params.has(name) && !isValidated(body, name, scope, bridged)) {
-          scope.report(node, `The parameter ${name} is not checked in this function.`);
+          scope.report(node, { key: 'unchecked', values: { name } });
         }
       }
     });

@@ -6,7 +6,10 @@
       "level": "warning",
       "docs": "https://build.qorechain.io/faq",
       "message": "This QoreChain precompile address is written in mixed case.",
-      "fix": "Write precompile addresses in lowercase."
+      "fix": "Write precompile addresses in lowercase.",
+      "details": {
+        "pointsAt": "It points at {name}."
+      }
     },
     {
       "id": "S002",
@@ -14,7 +17,10 @@
       "level": "error",
       "docs": "https://docs.qorechain.io/developer-guide/evm-precompiles",
       "message": "A low-level call to a precompile uses the return data without checking its length. An inactive precompile returns success with empty data.",
-      "fix": "Check that the return data is long enough before decoding it, and treat empty data as a failure."
+      "fix": "Check that the return data is long enough before decoding it, and treat empty data as a failure.",
+      "details": {
+        "callsTo": "The call goes to {name}."
+      }
     },
     {
       "id": "S003",
@@ -22,7 +28,12 @@
       "level": "error",
       "docs": "https://docs.qorechain.io/developer-guide/evm-precompiles",
       "message": "The result of pqcKeyStatus is used without checking both registered and possessionProven.",
-      "fix": "Require registered and possessionProven before trusting the key."
+      "fix": "Require registered and possessionProven before trusting the key.",
+      "details": {
+        "unreadOne": "{fields} is never read.",
+        "unreadMany": "{fields} are never read.",
+        "decodesFew": "It decodes {count} of the 4 return values, so {field} is never read."
+      }
     },
     {
       "id": "S004",
@@ -30,7 +41,12 @@
       "level": "error",
       "docs": "https://docs.qorechain.io/build-before-qday/workshop-2",
       "message": "The return value of pqcVerify is not checked.",
-      "fix": "Require the pqcVerify result to be true before acting on the signature."
+      "fix": "Require the pqcVerify result to be true before acting on the signature.",
+      "details": {
+        "discarded": "The result is discarded.",
+        "storedUnread": "The result is stored but never read.",
+        "statusOnly": "Only the call status is read. A successful call does not mean the signature is valid."
+      }
     },
     {
       "id": "S005",
@@ -38,7 +54,11 @@
       "level": "error",
       "docs": "https://docs.qorechain.io/developer-guide/cross-vm-reference",
       "message": "The cross-VM bridge is called with staticcall, delegatecall or value.",
-      "fix": "Call the bridge with a plain call and no value."
+      "fix": "Call the bridge with a plain call and no value.",
+      "details": {
+        "kind": "It uses {kind}, which the bridge refuses.",
+        "value": "It sends value, which the bridge does not accept."
+      }
     },
     {
       "id": "S006",
@@ -46,7 +66,10 @@
       "level": "warning",
       "docs": "https://docs.qorechain.io/build-before-qday/workshop-3",
       "message": "A bridge payload is built by concatenating a string or bytes parameter that this function does not validate.",
-      "fix": "Validate or escape the parameter in the same function before it goes into the payload."
+      "fix": "Validate or escape the parameter in the same function before it goes into the payload.",
+      "details": {
+        "unchecked": "The parameter {name} is not checked in this function."
+      }
     },
     {
       "id": "S007",
@@ -54,7 +77,15 @@
       "level": "error",
       "docs": "https://docs.qorechain.io/build-before-qday/workshop-2",
       "message": "The message checked by pqcVerify does not bind block.chainid, address(this) or a changing counter, so a signature can be replayed.",
-      "fix": "Include block.chainid, address(this) and a nonce that changes on every use in the signed message."
+      "fix": "Include block.chainid, address(this) and a nonce that changes on every use in the signed message.",
+      "details": {
+        "leavesOut": "It leaves out {parts}."
+      },
+      "terms": {
+        "chainid": "block.chainid",
+        "self": "address(this)",
+        "counter": "a changing counter"
+      }
     },
     {
       "id": "S008",
@@ -62,7 +93,10 @@
       "level": "error",
       "docs": "https://docs.qorechain.io/developer-guide/evm-precompiles",
       "message": "Value is sent to a precompile address.",
-      "fix": "Do not send value to precompile addresses."
+      "fix": "Do not send value to precompile addresses.",
+      "details": {
+        "valueTo": "It sends value to {name}."
+      }
     }
   ]
 }

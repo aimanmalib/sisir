@@ -9,6 +9,6 @@ export const s008 = bodyRule('S008', ({ body, bindings, report }) => {
     const call = asMemberCall(node);
     if (!call || !sentValue(call)) return;
     const name = resolvePrecompile(call.target, bindings);
-    if (name && name !== BRIDGE) report(node, `It sends value to ${name}.`);
+    if (name && name !== BRIDGE) report(node, { key: 'valueTo', values: { name } });
   });
 });

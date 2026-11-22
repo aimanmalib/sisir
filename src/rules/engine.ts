@@ -1,5 +1,6 @@
 import parser from '@solidity-parser/parser';
 import { catalog as defaultCatalog } from './catalog.js';
+import { renderMessage } from './text.js';
 import type { ASTNode, ASTVisitor, CatalogEntry, FileResult, Finding, Rule } from './types.js';
 
 export interface LintOptions {
@@ -66,7 +67,9 @@ export function lintSource(source: string, options: LintOptions): FileResult {
       source,
       report(node, detail) {
         const loc = node.loc ?? { start: { line: 1, column: 0 }, end: { line: 1, column: 0 } };
-        const key = [entry.id, loc.start.line, loc.start.column, loc.end.line, loc.end.column, detail ?? ''].join(':');
+        const ref = typeof detail === 'string' ? undefined : detail;
+        const message = typeof detail === 'string' ? `${entry.message} ${detail}` : renderMessage(entry, ref, 'en');
+        const key = [entry.id, loc.start.line, loc.start.column, loc.end.line, loc.end.column, message].join(':');
         if (seen.has(key)) return;
         seen.add(key);
         findings.push({
@@ -77,9 +80,10 @@ export function lintSource(source: string, options: LintOptions): FileResult {
           column: loc.start.column + 1,
           endLine: loc.end.line,
           endColumn: loc.end.column + 1,
-          message: detail ? `${entry.message} ${detail}` : entry.message,
+          message,
           fix: entry.fix,
           docs: entry.docs,
+          ...(ref ? { detail: ref } : {}),
         });
       },
     });
