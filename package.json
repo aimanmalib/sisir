@@ -32,6 +32,7 @@
     "gate": "bash scripts/gerbang-ujian.sh"
   },
   "dependencies": {
+    "@noble/hashes": "1.8.0",
     "@solidity-parser/parser": "0.20.2"
   },
   "devDependencies": {
