@@ -2,7 +2,8 @@
   "chain": {
     "id": 9800,
     "name": "QoreChain testnet",
-    "evmRpc": "https://evm-testnet.qore.host"
+    "evmRpc": "https://evm-testnet.qore.host",
+    "nativeId": "qorechain-diana"
   },
   "contracts": {
     "sisirLedger": ""
@@ -25,5 +26,13 @@
         "file": "fixtures/workshop/QDayVault_v1_fixed.sol"
       }
     ]
+  },
+  "anchor": {
+    "windowBlocks": 600,
+    "windowMaxTxs": 1,
+    "gasLimit": 250000,
+    "maxFeePerGasWei": "112500000000",
+    "nativeGasLimit": 400000,
+    "recentLimit": 5
   }
 }
