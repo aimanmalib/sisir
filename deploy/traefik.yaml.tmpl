@@ -1,0 +1,35 @@
+# Route for the public host name to the sisir container. deploy/deploy.sh fills the @…@ values from
+# deploy/hos.env and copies the result into the proxy's dynamic configuration folder.
+# HTML is sent with `Cache-Control: no-transform`, so a CDN in front does not compress it: the `compress`
+# middleware here does (nginx in the container compresses too; an already encoded body passes through).
+# Plain http redirects to https.
+http:
+  routers:
+    sisir:
+      entryPoints: [https]
+      rule: Host(`@DOMAIN@`)
+      service: sisir-svc
+      middlewares: [sisir-compress]
+      tls:
+        certResolver: @CERT_RESOLVER@
+      priority: 100
+    sisir-http:
+      entryPoints: [http]
+      rule: Host(`@DOMAIN@`)
+      service: sisir-svc
+      middlewares: [sisir-https]
+      priority: 100
+  middlewares:
+    sisir-compress:
+      compress:
+        minResponseBodyBytes: 256
+        excludedContentTypes: [image/png, image/jpeg, image/webp, font/woff2]
+    sisir-https:
+      redirectScheme:
+        scheme: https
+        permanent: true
+  services:
+    sisir-svc:
+      loadBalancer:
+        servers:
+          - url: http://sisir:8080

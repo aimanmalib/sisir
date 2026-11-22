@@ -1,0 +1,31 @@
+# Keys, local state and internal notes never enter the build context.
+.env
+.env.*
+!.env.example
+state/
+keystore/
+dalaman/
+docs/hantar/
+NEXT.md
+CLAUDE.md
+CLAUDE.local.md
+deploy/hos.env
+deploy/*_TAG
+deploy/.uptime-state
+# Rebuilt inside the image or not needed at run time.
+.git
+**/node_modules
+**/dist
+contracts/
+evidence/
+brand/
+docs/
+test/
+web/e2e/
+.depot
+.github
+.pagar
+coverage
+test-results
+playwright-report
+*.log

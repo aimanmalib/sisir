@@ -30,3 +30,7 @@ state/
 keystore/
 *.log
 .tools/
+# Deploy host values and local deploy state
+/deploy/hos.env
+/deploy/*_TAG
+/deploy/.uptime-state

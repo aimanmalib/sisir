@@ -1,0 +1,20 @@
+# Sisir playground: one static container behind the host's reverse proxy. No published port.
+# Run through deploy/deploy.sh, which sources deploy/hos.env (host values, not tracked) first.
+# The service and container names carry the project name: on a shared proxy network a generic name
+# (web, app) becomes a host alias that can capture another project's traffic.
+name: sisir
+services:
+  sisir:
+    image: sisir:${SISIR_TAG:-latest}
+    container_name: sisir
+    restart: unless-stopped
+    read_only: true
+    tmpfs: [/tmp]
+    cpus: 0.25
+    mem_limit: 64m
+    networks: [proxy]
+
+networks:
+  proxy:
+    name: ${SISIR_NETWORK:?set SISIR_NETWORK in deploy/hos.env}
+    external: true
