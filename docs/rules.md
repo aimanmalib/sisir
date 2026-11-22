@@ -5,8 +5,8 @@ cross-VM bridge. Every rule is a syntax heuristic over one file. It does not fol
 or contracts, and it does not run the code. Sisir complements the official QoreChain contract auditor and
 does not replace it.
 
-Rule text, level and documentation link live in `src/rules/catalog.json`. Precompile addresses and the
-`pqcKeyStatus` return fields live in `src/rules/qorechain.json`. Each rule has positive and negative cases
+Rule text, level and documentation link live in `src/rules/catalog.json`. Precompile addresses, the
+`pqcKeyStatus` return fields and the bridge function name live in `src/rules/qorechain.json`. Each rule has positive and negative cases
 in `fixtures/rules/<id>/`; a line marked `// expect <id>` is where the rule must report.
 
 ## S001 precompile-address-case (warning)
@@ -67,3 +67,67 @@ Does not catch:
 - a result that is read but not used to stop the action;
 - a result assigned to a state variable or returned through several layers;
 - calls made in inline assembly.
+
+## S005 bridge-call-kind (error)
+
+Source: https://docs.qorechain.io/developer-guide/cross-vm-reference ("Plain `CALL` only, no value").
+
+Catches a `staticcall` or `delegatecall` to the cross-VM bridge at `0x…0901`, and any call to the bridge that
+sends value: a `value` call option on a low-level or typed call, or `transfer` and `send`. A call counts as a
+bridge call when its target resolves to the bridge address (same rules as S002) or when its payload encodes
+`executeCrossVMCall`. A literal `value: 0` is allowed.
+
+Does not catch:
+- a typed call through an interface that declares the bridge function `view`, which compiles to a static call;
+- targets that arrive as parameters with a payload the rule cannot read;
+- calls made in inline assembly.
+
+## S006 bridge-payload-concat (warning)
+
+Source: https://docs.qorechain.io/build-before-qday/workshop-3 (the note goes inside a JSON string, so it
+must be checked first).
+
+Catches a `string.concat`, `bytes.concat` or `abi.encodePacked` that contains a string literal and a `string`
+or `bytes` parameter, inside a function that calls the bridge directly or through other functions of the
+same contract, when that function never checks the parameter. A check is a read of the parameter in an
+`if`, loop or ternary condition, or a call that passes it on and does not lead to the bridge, such as
+`require(bytes(note).length <= 140)` or `_checkNote(bytes(note))`.
+
+Does not catch:
+- a check that is too weak, for example a length limit that still allows `"` or `\`;
+- a parameter copied into a local before it is concatenated;
+- payloads built in one function and sent to the bridge from another contract.
+
+Any call that does not lead to the bridge counts as a check, so a helper that only logs the parameter hides
+the finding.
+
+## S007 pqc-message-unbound (error)
+
+Source: https://docs.qorechain.io/build-before-qday/workshop-2 (the audit of the workshop vault: a signed
+message of only the recipient and amount can be replayed).
+
+Catches a `pqcVerify` call, typed or encoded with `abi.encodeCall` or `abi.encodeWithSignature`, whose
+message does not include all three of `block.chainid`, `this` and a changing counter. The rule follows the
+message through locals, through parameters of public and external functions, and into helper functions of
+the same contract that return it, as the workshop vault does with `withdrawalMessage`. A counter is a state
+variable, or a mapping entry, that the contract changes outside the constructor with `++`, `--`, `+=`, `-=`
+or an assignment that reads its old value.
+
+Does not catch, or stays silent on:
+- a message that passes through a parameter of an internal or private function, or a call to another
+  contract or library, because the rule cannot see what it holds;
+- a counter that is part of the message but never checked against the stored value;
+- replay protection that marks each used message in a mapping instead of using a counter. Such code is
+  reported as missing a counter.
+
+## S008 value-to-precompile (error)
+
+Source: https://docs.qorechain.io/developer-guide/evm-precompiles ("Do not send value to these addresses").
+
+Catches a call that sends value to a precompile address other than the bridge: a `value` call option, or
+`transfer` and `send` on the address. Value sent to the bridge is reported by S005, so one mistake gives one
+finding. A literal `value: 0` is allowed.
+
+Does not catch:
+- value sent through `selfdestruct` or inline assembly;
+- precompile addresses that arrive as parameters.
