@@ -1,0 +1,32 @@
+# Internal notes (never public)
+/dalaman/
+/docs/hantar/
+/NEXT.md
+/02-DECISIONS.md
+/CLAUDE.md
+/CLAUDE.local.md
+/.claude/
+/PELAN-*.md
+/PASTE-*.md
+/.autopilot/
+# Secrets
+.env*
+!.env.example
+# Build and test output
+node_modules/
+dist/
+out/
+contracts/cache/
+lcov.info
+*.vsix
+coverage/
+.vscode-test/
+test-results/
+playwright-report/
+deck/build/
+
+# Local state and keys
+state/
+keystore/
+*.log
+.tools/
