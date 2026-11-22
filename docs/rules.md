@@ -52,6 +52,10 @@ Does not catch:
 - a result passed to another function that is expected to check it;
 - results stored in a struct or state variable and checked elsewhere.
 
+Known false positive: a contract that decodes the raw answer twice, for example once for the head only and once
+for the fields, is flagged on the decode that does not read both fields. Decoding once avoids it
+(see `contracts/src/SisirLedger.sol`).
+
 A result that is ignored entirely is not reported, because nothing trusts it.
 
 ## S004 pqc-verify-result-ignored (error)
