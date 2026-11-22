@@ -18,7 +18,11 @@ const proxy = {
 
 // The playground runs the CLI's own rule engine: @sisir/rules is ../src/rules, not a copy.
 // The example contracts and config/app.json are read from the repository root as well.
-export const alias = { "@sisir/rules": fileURLToPath(new URL("../src/rules/index.ts", import.meta.url)) };
+// @sisir/report is the CLI's report hash, so an anchor from the browser matches one from the terminal.
+export const alias = {
+  "@sisir/rules": fileURLToPath(new URL("../src/rules/index.ts", import.meta.url)),
+  "@sisir/report": fileURLToPath(new URL("../src/report/hash.ts", import.meta.url)),
+};
 const repoRoot = fileURLToPath(new URL("..", import.meta.url));
 
 export default defineConfig({

@@ -7,7 +7,12 @@
     "tagline": "I check Solidity for QoreChain post-quantum mistakes. Everything runs in this browser.",
     "language": "Language"
   },
-  "lang": { "en": "EN", "ms": "BM", "enName": "English", "msName": "Bahasa Melayu" },
+  "lang": {
+    "en": "EN",
+    "ms": "BM",
+    "enName": "English",
+    "msName": "Bahasa Melayu"
+  },
   "toolbar": {
     "label": "Source tools",
     "example": "Example",
@@ -47,7 +52,11 @@
     "parse": "I could not read this file as Solidity",
     "empty": "Waiting for a contract"
   },
-  "level": { "error": "Error", "warning": "Warning", "info": "Note" },
+  "level": {
+    "error": "Error",
+    "warning": "Warning",
+    "info": "Note"
+  },
   "tag": {
     "line": "Line {line}",
     "fix": "Fix",
@@ -70,5 +79,63 @@
     "license": "Apache-2.0",
     "credit": "The examples are the workshop 2 audit vault from qorechain/build-before-qday (Apache-2.0)."
   },
-  "skip": "Skip to the source"
+  "skip": "Skip to the source",
+  "anchor": {
+    "title": "Ledger",
+    "heading": "Anchor this report",
+    "intro": "I can record this inspection on the QoreChain testnet. The chain keeps two hashes and the findings count, never your code.",
+    "file": "File",
+    "report": "Report hash",
+    "source": "Source hash",
+    "findings": "Findings",
+    "empty": "Pick or paste a contract to get a report to anchor.",
+    "parse": "This source does not parse, so there is no report to anchor.",
+    "noLedger": "The ledger is not deployed yet, so anchoring is off for now. The hashes above are what it will store.",
+    "copy": "Copy",
+    "copied": "Copied",
+    "step1": "Connect QoreX",
+    "step1Hint": "Testnet only. The wallet asks before anything is signed.",
+    "connect": "Connect QoreX",
+    "account": "Connected: {address}",
+    "wrongNetwork": "Switch to the QoreChain testnet",
+    "step2": "Open an EVM window",
+    "step2Hint": "QoreX signs this with your secp256k1 and ML-DSA-87 keys together. The window allows {txs} call to the ledger for {blocks} blocks.",
+    "open": "Open window in QoreX",
+    "opening": "Waiting for QoreX…",
+    "windowOpen": "Window open for {account}.",
+    "shieldLabel": "ML-DSA-87 layer: {state}",
+    "step3": "Anchor",
+    "step3Hint": "This calls SisirLedger.anchor with the two hashes and the findings count.",
+    "send": "Anchor this report",
+    "sending": "Waiting for the transaction…",
+    "anchored": "Anchored in block {block}.",
+    "tx": "Transaction {hash}",
+    "shield": {
+      "shielded": "present",
+      "pending": "being checked",
+      "downgraded": "missing",
+      "classical": "not used"
+    },
+    "error": {
+      "rejected": "You declined in the wallet. Nothing was sent.",
+      "notInstalled": "QoreX is not in this browser. Install it from qorechain.io/qorex, then reload this page.",
+      "unsupported": "QoreX does not sign EVM transactions yet, so this step cannot finish in QoreX today. The window you opened is already a hybrid-signed transaction on chain.",
+      "noKey": "The chain refused: this account has no registered ML-DSA-87 key.",
+      "noWindow": "The chain refused: this account has no open EVM window. Open one in step 2.",
+      "exhausted": "The window is used up. Open a new one in step 2.",
+      "notReady": "The ledger refused: this account's post-quantum key is not registered with proof of possession.",
+      "chainRefused": "The chain refused the transaction ({detail}).",
+      "failed": "Something went wrong and nothing was anchored. Try again."
+    },
+    "recent": "Recent anchors",
+    "recentEmpty": "No anchors yet.",
+    "recentError": "I could not read the ledger just now.",
+    "recentLoading": "Reading the ledger…",
+    "col": {
+      "account": "Account",
+      "findings": "Findings",
+      "block": "Block",
+      "report": "Report hash"
+    }
+  }
 }

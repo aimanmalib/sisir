@@ -1,0 +1,255 @@
+/* The ledger band under the bench: the report slip, the three anchor steps and the recent anchors. */
+.ledger {
+  display: grid;
+  gap: var(--space-3);
+  max-width: 88rem;
+  margin: 0 auto;
+  padding: var(--space-5) var(--space-4) var(--space-6);
+  border-top: 1px solid var(--bench-line);
+}
+
+.ledger__grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-5);
+  align-items: start;
+}
+
+.anchor,
+.recent {
+  display: grid;
+  gap: var(--space-3);
+  min-width: 0;
+}
+
+.anchor__title {
+  font-size: var(--step-1);
+  font-weight: 750;
+  font-variation-settings: "wdth" 104;
+  color: var(--on-bench);
+}
+
+.anchor__intro,
+.anchor__note,
+.recent__note {
+  max-width: 62ch;
+  color: var(--on-bench-soft);
+}
+
+/* The report slip: a paper docket torn off the sheet, hashes in the code face. */
+.slip {
+  display: grid;
+  margin: 0;
+  padding: var(--space-3) var(--space-4);
+  background: var(--paper);
+  color: var(--ink);
+  border-top: 2px dashed var(--paper-rule);
+  box-shadow: var(--shadow-sheet);
+}
+
+.slip__row {
+  display: grid;
+  grid-template-columns: minmax(6.5rem, auto) minmax(0, 1fr);
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-2) 0;
+  border-bottom: 1px solid var(--paper-rule);
+}
+
+.slip__row:last-child {
+  border-bottom: 0;
+}
+
+.slip__row dt {
+  font-size: var(--step--1);
+  font-weight: 700;
+  font-variation-settings: "wdth" 80;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+
+.slip__row dd {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+  min-width: 0;
+  margin: 0;
+  font-family: var(--font-code);
+  overflow-wrap: anywhere;
+}
+
+.slip__copy {
+  min-height: 2rem;
+  padding: 0 var(--space-2);
+  border: 1px solid var(--paper-rule);
+  border-radius: 4px;
+  background: var(--paper-gutter);
+  color: var(--ink-soft);
+  font: inherit;
+  font-family: var(--font-ui);
+  font-size: var(--step--1);
+  font-weight: 650;
+  cursor: pointer;
+}
+
+.slip__copy:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
+
+/* Three numbered steps; the current one is lit, finished ones are stamped green. */
+.steps {
+  display: grid;
+  gap: var(--space-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.step {
+  display: grid;
+  grid-template-columns: 2rem minmax(0, 1fr);
+  gap: var(--space-3);
+  padding: var(--space-3);
+  border: 1px solid var(--bench-line);
+  border-radius: var(--radius-control);
+  background: var(--bench-raised);
+}
+
+.step[data-state="todo"] {
+  opacity: 0.72;
+}
+
+.step[data-state="now"] {
+  border-color: var(--manila-deep);
+}
+
+.step__n {
+  display: grid;
+  place-items: center;
+  width: 2rem;
+  height: 2rem;
+  border: 2px solid var(--bench-line);
+  border-radius: 50%;
+  font-weight: 800;
+  font-variation-settings: "wdth" 90;
+  color: var(--on-bench-soft);
+}
+
+.step[data-state="now"] .step__n {
+  border-color: var(--manila);
+  color: var(--manila);
+}
+
+.step[data-state="done"] .step__n {
+  border-color: var(--green-on-bench);
+  color: var(--green-on-bench);
+}
+
+.step__body {
+  display: grid;
+  gap: var(--space-2);
+  justify-items: start;
+  min-width: 0;
+}
+
+.step__title {
+  font-size: var(--step-0);
+  font-weight: 700;
+  color: var(--on-bench);
+}
+
+.step__hint {
+  color: var(--on-bench-soft);
+  font-size: var(--step--1);
+}
+
+.step__ok,
+.step__error {
+  max-width: 62ch;
+  font-size: var(--step--1);
+  overflow-wrap: anywhere;
+}
+
+.step__ok {
+  color: var(--green-on-bench);
+}
+
+.step__error {
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-control);
+  background: var(--red-wash);
+  color: var(--red);
+  font-weight: 600;
+}
+
+.step .btn {
+  color: var(--on-bench);
+  font: inherit;
+  font-weight: 650;
+  max-width: 100%;
+  text-align: left;
+}
+
+.btn--primary {
+  border-color: var(--manila-deep);
+  background: var(--manila);
+  color: var(--manila-ink);
+}
+
+.step .btn--primary {
+  color: var(--manila-ink);
+}
+
+.btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.btn:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
+
+.recent__list {
+  display: grid;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-top: 1px solid var(--bench-line);
+}
+
+.recent__item {
+  display: grid;
+  gap: var(--space-1);
+  padding: var(--space-3) 0;
+  border-bottom: 1px solid var(--bench-line);
+  min-width: 0;
+}
+
+.recent__hash {
+  font-family: var(--font-code);
+  color: var(--manila);
+}
+
+.recent__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-1) var(--space-4);
+  color: var(--on-bench-soft);
+  font-size: var(--step--1);
+}
+
+.recent__time {
+  color: var(--on-bench-soft);
+  font-size: var(--step--1);
+}
+
+@media (min-width: 60rem) {
+  .ledger__grid {
+    grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr);
+    gap: var(--space-6);
+  }
+}

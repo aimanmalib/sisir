@@ -1,8 +1,11 @@
 import { fireEvent, render, screen, waitFor, within } from "@testing-library/react";
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import { App } from "./App.js";
 import { I18nProvider } from "./i18n/i18n.js";
 import ms from "../locales/ms.json";
+
+// These tests cover the inspector. The anchor dock (wallet and chain) is covered by the e2e suite in e2e/.
+vi.mock("./anchor/AnchorDock.js", () => ({ default: () => null }));
 
 function renderApp() {
   return render(

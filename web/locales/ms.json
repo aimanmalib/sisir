@@ -7,7 +7,12 @@
     "tagline": "Saya menyemak Solidity untuk kesilapan pasca-kuantum QoreChain. Semuanya berjalan dalam pelayar ini.",
     "language": "Bahasa"
   },
-  "lang": { "en": "EN", "ms": "BM", "enName": "English", "msName": "Bahasa Melayu" },
+  "lang": {
+    "en": "EN",
+    "ms": "BM",
+    "enName": "English",
+    "msName": "Bahasa Melayu"
+  },
   "toolbar": {
     "label": "Alat sumber",
     "example": "Contoh",
@@ -47,7 +52,11 @@
     "parse": "Saya tidak dapat membaca fail ini sebagai Solidity",
     "empty": "Menunggu kontrak"
   },
-  "level": { "error": "Ralat", "warning": "Amaran", "info": "Nota" },
+  "level": {
+    "error": "Ralat",
+    "warning": "Amaran",
+    "info": "Nota"
+  },
   "tag": {
     "line": "Baris {line}",
     "fix": "Pembaikan",
@@ -70,5 +79,63 @@
     "license": "Apache-2.0",
     "credit": "Contohnya ialah vault audit bengkel 2 daripada qorechain/build-before-qday (Apache-2.0)."
   },
-  "skip": "Langkau ke sumber"
+  "skip": "Langkau ke sumber",
+  "anchor": {
+    "title": "Lejar",
+    "heading": "Sauhkan laporan ini",
+    "intro": "Saya boleh merekod pemeriksaan ini di testnet QoreChain. Rantai menyimpan dua cincangan dan bilangan dapatan, bukan kod anda.",
+    "file": "Fail",
+    "report": "Cincangan laporan",
+    "source": "Cincangan sumber",
+    "findings": "Dapatan",
+    "empty": "Pilih atau tampal kontrak untuk mendapat laporan yang boleh disauhkan.",
+    "parse": "Sumber ini tidak dapat dihurai, jadi tiada laporan untuk disauhkan.",
+    "noLedger": "Lejar belum dideploy, jadi penyauhan dimatikan buat masa ini. Cincangan di atas ialah apa yang akan disimpannya.",
+    "copy": "Salin",
+    "copied": "Disalin",
+    "step1": "Sambung QoreX",
+    "step1Hint": "Testnet sahaja. Dompet bertanya sebelum apa-apa ditandatangani.",
+    "connect": "Sambung QoreX",
+    "account": "Disambung: {address}",
+    "wrongNetwork": "Tukar ke testnet QoreChain",
+    "step2": "Buka EVM window",
+    "step2Hint": "QoreX menandatangani ini dengan kunci secp256k1 dan ML-DSA-87 anda serentak. Window ini membenarkan {txs} panggilan ke lejar selama {blocks} blok.",
+    "open": "Buka window dalam QoreX",
+    "opening": "Menunggu QoreX…",
+    "windowOpen": "Window dibuka untuk {account}.",
+    "shieldLabel": "Lapisan ML-DSA-87: {state}",
+    "step3": "Sauh",
+    "step3Hint": "Ini memanggil SisirLedger.anchor dengan dua cincangan dan bilangan dapatan.",
+    "send": "Sauhkan laporan ini",
+    "sending": "Menunggu transaksi…",
+    "anchored": "Disauhkan dalam blok {block}.",
+    "tx": "Transaksi {hash}",
+    "shield": {
+      "shielded": "ada",
+      "pending": "sedang disemak",
+      "downgraded": "tiada",
+      "classical": "tidak dipakai"
+    },
+    "error": {
+      "rejected": "Anda menolak dalam dompet. Tiada apa dihantar.",
+      "notInstalled": "QoreX tiada dalam pelayar ini. Pasang dari qorechain.io/qorex, kemudian muat semula halaman ini.",
+      "unsupported": "QoreX belum menandatangani transaksi EVM, jadi langkah ini belum boleh selesai dalam QoreX hari ini. Window yang anda buka sudah pun transaksi bertandatangan hibrid di rantai.",
+      "noKey": "Rantai menolak: akaun ini tiada kunci ML-DSA-87 berdaftar.",
+      "noWindow": "Rantai menolak: akaun ini tiada EVM window terbuka. Buka satu di langkah 2.",
+      "exhausted": "Window sudah habis dipakai. Buka yang baharu di langkah 2.",
+      "notReady": "Lejar menolak: kunci pasca-kuantum akaun ini belum berdaftar dengan bukti pemilikan.",
+      "chainRefused": "Rantai menolak transaksi ({detail}).",
+      "failed": "Ada yang tidak kena dan tiada apa disauhkan. Cuba lagi."
+    },
+    "recent": "Sauh terkini",
+    "recentEmpty": "Belum ada sauh.",
+    "recentError": "Saya tidak dapat membaca lejar sekarang.",
+    "recentLoading": "Membaca lejar…",
+    "col": {
+      "account": "Akaun",
+      "findings": "Dapatan",
+      "block": "Blok",
+      "report": "Cincangan laporan"
+    }
+  }
 }

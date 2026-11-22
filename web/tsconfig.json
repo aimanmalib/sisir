@@ -23,6 +23,9 @@
     "paths": {
       "@sisir/rules": [
         "../src/rules/index.ts"
+      ],
+      "@sisir/report": [
+        "../src/report/hash.ts"
       ]
     }
   },

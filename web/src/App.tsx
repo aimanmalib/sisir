@@ -1,4 +1,5 @@
-import { useCallback, useMemo, useState } from 'react';
+import { lazy, Suspense, useCallback, useMemo, useState } from 'react';
+import { reportDigest } from '@sisir/report';
 import { Masthead } from './components/Masthead.js';
 import { Register } from './components/Register.js';
 import { SourceSheet, type SheetMode } from './components/SourceSheet.js';
@@ -10,6 +11,8 @@ import { findingKey, inspect } from './lint/inspect.js';
 import { readText } from './lint/readFile.js';
 import { useDebounced } from './lint/useDebounced.js';
 import { samples } from './samples.js';
+
+const AnchorDock = lazy(() => import('./anchor/AnchorDock.js'));
 
 const FIRST = samples[0];
 const UNTITLED = 'Contract.sol';
@@ -30,6 +33,11 @@ export function App() {
   const result = useMemo(() => inspect(settled, fileName), [settled, fileName]);
   const firstKey = result.findings[0] ? findingKey(result.findings[0]) : null;
   const shownKey = openKey ?? firstKey;
+  const empty = settled.trim() === '';
+  const digest = useMemo(
+    () => (empty || result.error ? null : reportDigest([{ path: fileName, source: settled }], result.findings)),
+    [empty, result, fileName, settled],
+  );
 
   const load = useCallback((next: string, name: string, id: string | null) => {
     setSource(next);
@@ -105,8 +113,16 @@ export function App() {
             <LockIcon /> {t('sheet.private')}
           </p>
         </div>
-        <Register result={result} empty={settled.trim() === ''} ruleFilter={ruleFilter} onFilter={setRuleFilter} />
+        <Register result={result} empty={empty} ruleFilter={ruleFilter} onFilter={setRuleFilter} />
       </main>
+      <section className="ledger" aria-labelledby="ledger-title">
+        <h2 id="ledger-title" className="register__title">
+          {t('anchor.title')}
+        </h2>
+        <Suspense fallback={<p className="anchor__note">{t('anchor.recentLoading')}</p>}>
+          <AnchorDock digest={digest} fileName={fileName} reason={empty ? 'empty' : result.error ? 'parse' : null} />
+        </Suspense>
+      </section>
       <footer className="colophon">
         <p>{t('footer.complement')}</p>
         <p>{t('footer.credit')}</p>

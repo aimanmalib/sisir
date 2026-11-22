@@ -3,6 +3,7 @@ import { injectedWallet } from "@rainbow-me/rainbowkit/wallets";
 import { qorechain, qorechainTestnet } from "@qorechain/evm";
 import { qorexWallet } from "@qorechain/qorex-rainbowkit";
 import { createConfig, http } from "wagmi";
+import { config as app } from "./config.js";
 
 // QoreX first, then any other injected (EIP-1193) wallet. Neither uses
 // WalletConnect, so the project id is only a placeholder unless you add a
@@ -25,7 +26,8 @@ export const config = createConfig({
   chains: [qorechainTestnet, qorechain],
   connectors,
   transports: {
-    [qorechainTestnet.id]: http(),
+    // The RPC is the one in config/app.json, so a node change needs no code change.
+    [qorechainTestnet.id]: http(qorechainTestnet.id === app.chain.id ? app.chain.evmRpc : undefined),
     [qorechain.id]: http(),
   },
 });
@@ -35,3 +37,7 @@ declare module "wagmi" {
     config: typeof config;
   }
 }
+
+/** The chain from config/app.json, narrowed to the chains configured above. */
+export const appChainId: typeof qorechainTestnet.id | typeof qorechain.id =
+  app.chain.id === qorechain.id ? qorechain.id : qorechainTestnet.id;
