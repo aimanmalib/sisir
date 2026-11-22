@@ -19,6 +19,8 @@ contract is a new deployment, listed here with its new address.
 - Playground at https://sisir.sasateguh.com, started from `create-qorechain-dapp` 0.14.0 (`viem-wagmi` template): the
   same rule engine in the browser, English and Bahasa Melayu, QoreX through RainbowKit, and the anchor flow (an EVM
   access window opened with a hybrid-signed `MsgOpenEVMWindow`, then `SisirLedger.anchor`).
+- GitHub Action (`action.yml`): runs Sisir on given paths, uploads `SARIF` to code scanning, fails on error-level
+  findings. Sisir's own CI uses it.
 - Static site image with nginx, a deploy script with rollback, and a health watch.
 - README, `AI_USAGE.md`, contributing guide, security policy, code of conduct, and decision records in
   `docs/decisions/`.

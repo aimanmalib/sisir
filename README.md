@@ -46,6 +46,27 @@ Exit codes: 0 no error-level findings, 1 error-level findings, 2 parse or usage 
 The exit code makes it a CI step: the job fails when there is an error. `--format sarif` writes `SARIF` 2.1.0, which
 GitHub code scanning and most editors read. `--format json` gives the same findings for your own scripts.
 
+### In GitHub Actions
+
+Sisir is also a composite Action. It prints the findings in the job log, uploads the `SARIF` report to code scanning
+so each finding shows on its line in a pull request, and fails the step on an error-level finding.
+
+```yaml
+permissions:
+  contents: read
+  security-events: write
+steps:
+  - uses: actions/checkout@v4
+  - uses: aimanmalib/sisir@main # pin a commit SHA in your own workflow
+    with:
+      paths: contracts/src
+```
+
+Inputs: `paths` (spaces or new lines, default `.`), `upload-sarif` (default `true`, skipped on pull requests from
+forks), `category` (default `sisir`), `fail-on-error` (default `true`). Outputs: `exit-code` and `sarif-file`. The
+runner needs Node.js 20.10 or later, which GitHub's Ubuntu runners have. Sisir's own CI runs the Action on
+`contracts/src` and checks that the workshop draft fails it.
+
 To work on Sisir itself:
 
 ```sh
