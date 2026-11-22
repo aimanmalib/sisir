@@ -11,20 +11,34 @@ export function short(hex: string): string {
   return hex.length > 14 ? `${hex.slice(0, 8)}…${hex.slice(-6)}` : hex;
 }
 
-function HashRow({ label, value }: { label: string; value: string }) {
+type CopyState = 'idle' | 'copied' | 'blocked';
+const COPY_TEXT: Record<CopyState, string> = { idle: 'anchor.copy', copied: 'anchor.copied', blocked: 'anchor.copyBlocked' };
+
+/** One hash on the report slip. A browser that refuses the clipboard gets a plain answer, not a silent button. */
+export function HashRow({ label, value }: { label: string; value: string }) {
   const { t } = useI18n();
-  const [copied, setCopied] = useState(false);
-  const copy = () => {
-    void navigator.clipboard?.writeText(value).then(() => setCopied(true));
+  const [copy, setCopy] = useState<CopyState>('idle');
+  const onCopy = () => {
+    const write = navigator.clipboard?.writeText(value) ?? Promise.reject(new Error('no clipboard'));
+    write.then(
+      () => setCopy('copied'),
+      () => setCopy('blocked'),
+    );
   };
   return (
     <div className="slip__row">
       <dt>{label}</dt>
       <dd>
         <code title={value}>{short(value)}</code>
-        <button type="button" className="slip__copy" onClick={copy} aria-label={`${t('anchor.copy')}: ${label}`}>
-          {copied ? t('anchor.copied') : t('anchor.copy')}
+        <button type="button" className="slip__copy" onClick={onCopy} aria-label={`${t('anchor.copy')}: ${label}`}>
+          {t(COPY_TEXT[copy])}
         </button>
+        {copy === 'blocked' ? (
+          <span className="slip__blocked" role="status">
+            {t('anchor.copyBlockedHint')}
+            <code className="slip__full">{value}</code>
+          </span>
+        ) : null}
       </dd>
     </div>
   );

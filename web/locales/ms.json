@@ -93,6 +93,8 @@
     "noLedger": "Lejar belum dideploy, jadi penyauhan dimatikan buat masa ini. Cincangan di atas ialah apa yang akan disimpannya.",
     "copy": "Salin",
     "copied": "Disalin",
+    "copyBlocked": "Tidak disalin",
+    "copyBlockedHint": "Pelayar anda menyekat papan keratan. Pilih cincangan penuh di bawah.",
     "step1": "Sambung QoreX",
     "step1Hint": "Testnet sahaja. Dompet bertanya sebelum apa-apa ditandatangani.",
     "connect": "Sambung QoreX",

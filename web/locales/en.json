@@ -93,6 +93,8 @@
     "noLedger": "The ledger is not deployed yet, so anchoring is off for now. The hashes above are what it will store.",
     "copy": "Copy",
     "copied": "Copied",
+    "copyBlocked": "Not copied",
+    "copyBlockedHint": "Your browser blocked the clipboard. Select the full hash below.",
     "step1": "Connect QoreX",
     "step1Hint": "Testnet only. The wallet asks before anything is signed.",
     "connect": "Connect QoreX",

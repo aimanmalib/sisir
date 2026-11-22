@@ -99,6 +99,25 @@
   outline-offset: 2px;
 }
 
+/* The clipboard was refused: say so and put the whole hash where a finger can select it. */
+.slip__blocked {
+  display: grid;
+  flex-basis: 100%;
+  gap: var(--space-1);
+  min-width: 0;
+  font-family: var(--font-ui);
+  font-size: var(--step--1);
+  color: var(--ink-soft);
+}
+
+.slip__full {
+  font-family: var(--font-code);
+  color: var(--ink);
+  overflow-wrap: anywhere;
+  user-select: all;
+  -webkit-user-select: all;
+}
+
 /* Three numbered steps; the current one is lit, finished ones are stamped green. */
 .steps {
   display: grid;
