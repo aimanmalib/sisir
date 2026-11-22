@@ -59,6 +59,7 @@ strict() {
   case $runner in
     forge) counts=$(count_forge <<<"$out" || true) ;;
     vitest) counts=$(count_vitest <<<"$out" || true) ;;
+    playwright) counts=$(count_playwright <<<"$out" || true) ;;
   esac
   read -r passed skipped <<<"${counts:-0 0}"
   [ "${passed:-0}" -ge 1 ] || fail "$label: no tests ran"
@@ -79,6 +80,15 @@ if [ -f web/package.json ]; then
   step "web typecheck"; (cd web && npx --no-install tsc --noEmit) || fail "web typecheck failed"
   step "web tests";     strict vitest "web vitest" env -C web npx --no-install vitest run
   step "web build";     (cd web && npx --no-install vite build --logLevel warn) || fail "web build failed"
+  # The anchor flow against the QoreX test double and a fake chain (web/e2e). CI installs the browser and its
+  # system libraries; a developer machine reuses the browser Playwright already downloaded.
+  if [ -d web/e2e ]; then
+    if [ -n "${CI:-}" ]; then
+      step "install chromium for playwright"
+      (cd web && npx --no-install playwright install --with-deps chromium) >"$tmp/pw.log" 2>&1 || { tail -n 30 "$tmp/pw.log"; fail "playwright install failed"; }
+    fi
+    step "web e2e"; strict playwright "web e2e" env -C web npx --no-install playwright test --reporter=line
+  fi
 fi
 
 if [ -f contracts/foundry.toml ]; then
