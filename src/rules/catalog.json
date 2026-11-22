@@ -1,0 +1,68 @@
+{
+  "rules": [
+    {
+      "id": "S001",
+      "name": "precompile-address-case",
+      "level": "warning",
+      "docs": "https://build.qorechain.io/faq",
+      "message": "This QoreChain precompile address is written in mixed case.",
+      "fix": "Write precompile addresses in lowercase."
+    },
+    {
+      "id": "S002",
+      "name": "precompile-empty-return",
+      "level": "error",
+      "docs": "https://docs.qorechain.io/developer-guide/evm-precompiles",
+      "message": "A low-level call to a precompile uses the return data without checking its length. An inactive precompile returns success with empty data.",
+      "fix": "Check that the return data is long enough before decoding it, and treat empty data as a failure."
+    },
+    {
+      "id": "S003",
+      "name": "pqc-key-status-unchecked",
+      "level": "error",
+      "docs": "https://docs.qorechain.io/developer-guide/evm-precompiles",
+      "message": "The result of pqcKeyStatus is used without checking both registered and possessionProven.",
+      "fix": "Require registered and possessionProven before trusting the key."
+    },
+    {
+      "id": "S004",
+      "name": "pqc-verify-result-ignored",
+      "level": "error",
+      "docs": "https://docs.qorechain.io/build-before-qday/workshop-2",
+      "message": "The return value of pqcVerify is not checked.",
+      "fix": "Require the pqcVerify result to be true before acting on the signature."
+    },
+    {
+      "id": "S005",
+      "name": "bridge-call-kind",
+      "level": "error",
+      "docs": "https://docs.qorechain.io/developer-guide/cross-vm-reference",
+      "message": "The cross-VM bridge is called with staticcall, delegatecall or value.",
+      "fix": "Call the bridge with a plain call and no value."
+    },
+    {
+      "id": "S006",
+      "name": "bridge-payload-concat",
+      "level": "warning",
+      "docs": "https://docs.qorechain.io/build-before-qday/workshop-3",
+      "message": "A bridge payload is built by concatenating a string or bytes parameter that this function does not validate.",
+      "fix": "Validate or escape the parameter in the same function before it goes into the payload."
+    },
+    {
+      "id": "S007",
+      "name": "pqc-message-unbound",
+      "level": "error",
+      "docs": "https://docs.qorechain.io/build-before-qday/workshop-2",
+      "message": "The message checked by pqcVerify does not bind block.chainid, address(this) or a changing counter, so a signature can be replayed.",
+      "fix": "Include block.chainid, address(this) and a nonce that changes on every use in the signed message."
+    },
+    {
+      "id": "S008",
+      "name": "value-to-precompile",
+      "level": "error",
+      "docs": "https://docs.qorechain.io/developer-guide/evm-precompiles",
+      "message": "Value is sent to a precompile address.",
+      "fix": "Do not send value to precompile addresses."
+    }
+  ]
+}
