@@ -1,0 +1,29 @@
+{
+  "chain": {
+    "id": 9800,
+    "name": "QoreChain testnet",
+    "evmRpc": "https://evm-testnet.qore.host"
+  },
+  "contracts": {
+    "sisirLedger": ""
+  },
+  "links": {
+    "repo": "https://github.com/aimanmalib/sisir",
+    "rules": "https://github.com/aimanmalib/sisir/blob/main/docs/rules.md"
+  },
+  "playground": {
+    "lintDelayMs": 250,
+    "maxSourceBytes": 262144,
+    "defaultLanguage": "en",
+    "samples": [
+      {
+        "id": "workshop-draft",
+        "file": "fixtures/workshop/QDayVault_v0_buggy.sol"
+      },
+      {
+        "id": "workshop-fixed",
+        "file": "fixtures/workshop/QDayVault_v1_fixed.sol"
+      }
+    ]
+  }
+}
