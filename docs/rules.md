@@ -131,3 +131,17 @@ finding. A literal `value: 0` is allowed.
 Does not catch:
 - value sent through `selfdestruct` or inline assembly;
 - precompile addresses that arrive as parameters.
+
+## On the workshop 2 audit vault
+
+`fixtures/workshop/` holds the first draft and the fixed version of the workshop 2 audit vault, copied unchanged
+(source commit and hashes in `fixtures/workshop/README.md`). `test/workshop.test.ts` checks the result:
+
+| File | Errors | Warnings | Findings |
+|---|---|---|---|
+| `QDayVault_v0_buggy.sol` (first draft) | 2 | 0 | S003 line 29, S007 line 31 |
+| `QDayVault_v1_fixed.sol` (fixed) | 0 | 0 | none |
+
+Both draft findings match the workshop's own audit notes: S007 is finding 4 (the signed message can be replayed),
+and S003 is the key check the notes list as fixed although the auditor did not flag it. The other draft findings in
+those notes are general Solidity issues, which Sisir leaves to other tools.
