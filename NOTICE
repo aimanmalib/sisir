@@ -1,0 +1,25 @@
+Sisir
+Copyright 2026 Aiman Malib
+
+This product is licensed under the Apache License, Version 2.0 (see LICENSE).
+
+Sisir was built for Build Before Q-Day: The QoreChain Developer Fest.
+
+Test fixtures under fixtures/workshop/ are the workshop 2 audit vault
+contracts (first draft and fixed version) from:
+
+  qorechain/build-before-qday
+  https://github.com/qorechain/build-before-qday
+  Copyright 2026 QoreChain
+  Licensed under the Apache License, Version 2.0
+
+The source commit and file paths are recorded in fixtures/workshop/README.md.
+
+Sisir parses Solidity with:
+
+  @solidity-parser/parser
+  https://github.com/solidity-parser/parser
+  Licensed under the MIT License
+
+Other third-party packages keep their own licences. They are listed with
+their versions in package.json and package-lock.json.
