@@ -1,0 +1,63 @@
+name: Sisir
+description: Lint Solidity contracts for QoreChain post-quantum and Cross-VM mistakes, and upload the findings to code scanning.
+author: aimanmalib
+branding:
+  icon: shield
+  color: green
+
+inputs:
+  paths:
+    description: Files or folders to lint, separated by spaces or new lines.
+    required: false
+    default: .
+  upload-sarif:
+    description: Upload the SARIF report to GitHub code scanning. Needs `security-events write`. Skipped on pull requests from forks.
+    required: false
+    default: 'true'
+  category:
+    description: Code scanning category, so this report does not replace another tool's.
+    required: false
+    default: sisir
+  fail-on-error:
+    description: Fail the step when Sisir reports an error-level finding.
+    required: false
+    default: 'true'
+
+outputs:
+  exit-code:
+    description: The CLI exit code. 0 no error-level findings, 1 error-level findings, 2 parse or usage error.
+    value: ${{ steps.lint.outputs.exit-code }}
+  sarif-file:
+    description: Path of the SARIF report on the runner.
+    value: ${{ steps.lint.outputs.sarif-file }}
+
+runs:
+  using: composite
+  steps:
+    - name: Install Sisir
+      shell: bash
+      working-directory: ${{ github.action_path }}
+      run: npm ci --no-audit --no-fund --loglevel=error
+
+    - name: Run Sisir
+      id: lint
+      shell: bash
+      env:
+        SISIR_CLI: ${{ github.action_path }}/dist/cli.js
+        SISIR_PATHS: ${{ inputs.paths }}
+        SISIR_SARIF: ${{ runner.temp }}/sisir.sarif
+      run: bash "$GITHUB_ACTION_PATH/scripts/action/run.sh"
+
+    - name: Upload SARIF
+      if: inputs.upload-sarif == 'true' && steps.lint.outputs.sarif-file != '' && github.event.pull_request.head.repo.fork != true
+      uses: github/codeql-action/upload-sarif@1bd86f2fdb4b86187fa4059f16f31a3202acc9ea # v4
+      with:
+        sarif_file: ${{ steps.lint.outputs.sarif-file }}
+        category: ${{ inputs.category }}
+
+    - name: Fail on error-level findings
+      if: steps.lint.outputs.exit-code == '1' && inputs.fail-on-error == 'true'
+      shell: bash
+      run: |
+        echo "::error title=Sisir::Sisir found error-level issues. Each one is in the log above with a fix and a link."
+        exit 1
