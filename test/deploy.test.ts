@@ -23,7 +23,7 @@ describe('deploy/nginx: headers the CDN and the browser rely on', () => {
 
   it('caches hashed assets for a year and never falls back to HTML for a missing one', () => {
     const assets = block('/assets/');
-    expect(assets).toMatch(/max-age=31536000, immutable/);
+    expect(assets).toMatch(/max-age=31536000, immutable";/); // no `always`: a 404 is not cached for a year
     expect(assets).toMatch(/try_files \$uri =404;/);
   });
 
