@@ -1,0 +1,74 @@
+{
+  "meta": {
+    "title": "Sisir: lint Solidity pasca-kuantum untuk QoreChain",
+    "description": "Tampal kontrak Solidity dan lihat kesilapan pasca-kuantum QoreChain dalam pelayar anda. Lapan peraturan, setiap satu dengan dokumen rasmi."
+  },
+  "header": {
+    "tagline": "Saya menyemak Solidity untuk kesilapan pasca-kuantum QoreChain. Semuanya berjalan dalam pelayar ini.",
+    "language": "Bahasa"
+  },
+  "lang": { "en": "EN", "ms": "BM", "enName": "English", "msName": "Bahasa Melayu" },
+  "toolbar": {
+    "label": "Alat sumber",
+    "example": "Contoh",
+    "upload": "Muat naik .sol",
+    "inspect": "Periksa",
+    "edit": "Sunting",
+    "clear": "Kosongkan"
+  },
+  "sample": {
+    "workshop-draft": "Vault bengkel, draf",
+    "workshop-fixed": "Vault bengkel, dibaiki"
+  },
+  "sheet": {
+    "label": "Sumber",
+    "editLabel": "Sumber Solidity",
+    "placeholder": "Tampal kontrak Solidity di sini, atau muat naik fail .sol.",
+    "empty": "Belum ada apa-apa untuk diperiksa. Tampal kontrak atau pilih contoh.",
+    "drop": "Lepaskan fail .sol untuk memeriksanya",
+    "private": "Kod anda kekal dalam pelayar ini. Tiada apa yang dihantar ke mana-mana.",
+    "lines": "{count} baris",
+    "lineFindings": "{count} dapatan pada baris {line}"
+  },
+  "register": {
+    "title": "Pemeriksaan",
+    "rules": "Peraturan",
+    "showRule": "Tunjuk {id} sahaja",
+    "showAll": "Tunjuk semua peraturan",
+    "none": "Tiada dapatan untuk peraturan ini"
+  },
+  "verdict": {
+    "clear": "Tiada ralat",
+    "stamp": "Lulus",
+    "errors": "{count} ralat",
+    "error": "1 ralat",
+    "warnings": "{count} amaran",
+    "warning": "1 amaran",
+    "parse": "Saya tidak dapat membaca fail ini sebagai Solidity",
+    "empty": "Menunggu kontrak"
+  },
+  "level": { "error": "Ralat", "warning": "Amaran", "info": "Nota" },
+  "tag": {
+    "line": "Baris {line}",
+    "fix": "Pembaikan",
+    "docs": "Dokumen rasmi",
+    "close": "Tutup"
+  },
+  "parse": {
+    "title": "Ralat hurai",
+    "where": "Baris {line}, lajur {column}. Penghurai berkata:"
+  },
+  "error": {
+    "tooLarge": "Fail ini lebih besar daripada {kb} KB. Buka fail yang lebih kecil.",
+    "notSol": "Pilih fail .sol.",
+    "read": "Saya tidak dapat membaca fail itu."
+  },
+  "footer": {
+    "complement": "Sisir ialah pelengkap kepada pengaudit rasmi, bukan pengganti. Peraturannya semakan sintaks dan ada yang terlepas.",
+    "rules": "Apa yang setiap peraturan tangkap dan terlepas",
+    "source": "Kod sumber",
+    "license": "Apache-2.0",
+    "credit": "Contohnya ialah vault audit bengkel 2 daripada qorechain/build-before-qday (Apache-2.0)."
+  },
+  "skip": "Langkau ke sumber"
+}

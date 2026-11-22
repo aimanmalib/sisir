@@ -1,0 +1,55 @@
+/* The bench: graphite surround, a bone paper sheet, manila tags, inspector inks. */
+:root {
+  --bench: #1e201e;
+  --bench-raised: #282b28;
+  --bench-line: #3a3e3a;
+  --on-bench: #ece8dc;
+  --on-bench-soft: #aaa698;
+
+  --paper: #f4f0e5;
+  --paper-rule: #e3ddcc;
+  --paper-gutter: #ebe5d5;
+  --ink: #1c1c1a;
+  --ink-soft: #5b574d;
+
+  --manila: #e6cc8a;
+  --manila-deep: #cfb067;
+  --manila-ink: #2b2410;
+  --string: #6f6239;
+
+  --red: #b3301c;
+  --red-wash: #f6dcd3;
+  --amber: #8a5a00;
+  --amber-wash: #f5e6c4;
+  --green: #2e6a3b;
+  --green-on-bench: #8fd19e;
+
+  --tk-keyword: #23417f;
+  --tk-type: #6a2d77;
+  --tk-string: #8a4510;
+  --tk-number: #1d6355;
+  --tk-comment: #7a7466;
+
+  --font-ui: "Archivo Variable", "Archivo", system-ui, sans-serif;
+  --font-code: "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+
+  --step--1: 0.8125rem;
+  --step-0: 0.9375rem;
+  --step-1: 1.125rem;
+  --step-2: 1.5rem;
+  --step-3: clamp(1.75rem, 1.2rem + 2vw, 2.5rem);
+
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.5rem;
+  --space-6: 2rem;
+  --space-7: 3rem;
+
+  --radius-control: 6px;
+  --shadow-sheet: 0 1px 0 rgb(0 0 0 / 0.25), 0 18px 40px -18px rgb(0 0 0 / 0.6);
+  --shadow-tag: 0 1px 1px rgb(43 36 16 / 0.18), 0 4px 10px -4px rgb(43 36 16 / 0.35);
+  --focus: #f0b429;
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+}

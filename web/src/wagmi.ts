@@ -15,7 +15,7 @@ const connectors = connectorsForWallets(
     },
   ],
   {
-    appName: "QoreChain dApp",
+    appName: "Sisir",
     projectId: import.meta.env.VITE_WALLETCONNECT_PROJECT_ID ?? "unused",
   },
 );

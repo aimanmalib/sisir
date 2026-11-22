@@ -1,4 +1,5 @@
 import react from "@vitejs/plugin-react";
+import { fileURLToPath } from "node:url";
 import { defineConfig } from "vite";
 
 // The public REST APIs send no CORS headers, so the browser reaches them
@@ -15,8 +16,15 @@ const proxy = {
   "/lcd-mainnet": rest("https://api.qore.host"),
 };
 
+// The playground runs the CLI's own rule engine: @sisir/rules is ../src/rules, not a copy.
+// The example contracts and config/app.json are read from the repository root as well.
+export const alias = { "@sisir/rules": fileURLToPath(new URL("../src/rules/index.ts", import.meta.url)) };
+const repoRoot = fileURLToPath(new URL("..", import.meta.url));
+
 export default defineConfig({
   plugins: [react()],
-  server: { port: 5173, proxy },
+  resolve: { alias },
+  build: { target: "es2022" },
+  server: { port: 5173, proxy, fs: { allow: [repoRoot] } },
   preview: { proxy },
 });

@@ -1,86 +1,121 @@
-import { ConnectButton } from "@rainbow-me/rainbowkit";
-import {
-  QORECHAIN_REST_ENDPOINTS,
-  classifyEvmWindowRejection,
-  qorechainTestnet,
-  evmWindowStatus,
-  type EvmWindowRejection,
-} from "@qorechain/evm";
-import { useQuery } from "@tanstack/react-query";
-import { formatEther } from "viem";
-import { useAccount, useBalance, useBlockNumber, useSendTransaction } from "wagmi";
+import { useCallback, useMemo, useState } from 'react';
+import { Masthead } from './components/Masthead.js';
+import { Register } from './components/Register.js';
+import { SourceSheet, type SheetMode } from './components/SourceSheet.js';
+import { Toolbar } from './components/Toolbar.js';
+import { LockIcon } from './components/icons.js';
+import { config } from './config.js';
+import { useI18n } from './i18n/i18n.js';
+import { findingKey, inspect } from './lint/inspect.js';
+import { readText } from './lint/readFile.js';
+import { useDebounced } from './lint/useDebounced.js';
+import { samples } from './samples.js';
 
-const REMEDY: Record<EvmWindowRejection, string> = {
-  "no-pqc-key": "This account has no registered ML-DSA-87 key. Register one on the native lane first.",
-  "no-window": "No EVM authorisation window is open. Open one on the native lane, then retry.",
-  exhausted: "The window has run out of blocks, transactions or value. Open a new one.",
-  invalid: "The chain refused the window parameters.",
-};
+const FIRST = samples[0];
+const UNTITLED = 'Contract.sol';
 
-/**
- * The REST API of each chain, through the dev server's proxy (vite.config.ts):
- * the public REST endpoints send no CORS headers. Same chains as
- * QORECHAIN_REST_ENDPOINTS.
- */
-const REST_PROXY: Record<number, string | undefined> = Object.fromEntries(
-  Object.keys(QORECHAIN_REST_ENDPOINTS).map((id) => [
-    Number(id),
-    Number(id) === qorechainTestnet.id ? "/lcd-testnet" : "/lcd-mainnet",
-  ]),
-);
-
-/** The account's EVM authorisation window, read over the native-lane REST API. */
-function WindowStatus({ address, chainId }: { address: `0x${string}`; chainId: number }) {
-  const rest = REST_PROXY[chainId];
-  const { data, error, isLoading } = useQuery({
-    queryKey: ["evm-window", chainId, address],
-    queryFn: () => evmWindowStatus({ rest: rest!, address }),
-    enabled: rest !== undefined,
-    refetchInterval: 10_000,
-  });
-  if (!rest) return <p>Unknown network.</p>;
-  if (isLoading) return <p>Reading the EVM window...</p>;
-  if (error) return <p>Could not read the window: {error.message}</p>;
-  if (!data?.found) {
-    return <p>EVM window: none. Sending from this account is refused until one is opened.</p>;
-  }
-  return (
-    <p>
-      EVM window: {data.live ? "live" : "not usable"} ({data.remainingBlocks.toString()} blocks,{" "}
-      {data.remainingTxs.toString()} transactions, {data.remainingValue.toString()} uqor left)
-    </p>
-  );
-}
-
+/** The playground: a source on the bench, a tag on every flagged line, and the register beside it. */
 export function App() {
-  const { address, chainId, isConnected } = useAccount();
-  const { data: balance } = useBalance({ address });
-  const { data: block } = useBlockNumber({ watch: true });
-  const send = useSendTransaction();
-  const rejection = send.error ? classifyEvmWindowRejection(send.error) : undefined;
+  const { t } = useI18n();
+  const [source, setSource] = useState(FIRST?.source ?? '');
+  const [fileName, setFileName] = useState(FIRST?.fileName ?? UNTITLED);
+  const [sampleId, setSampleId] = useState<string | null>(FIRST?.id ?? null);
+  const [mode, setMode] = useState<SheetMode>('inspect');
+  const [ruleFilter, setRuleFilter] = useState<string | null>(null);
+  const [openKey, setOpenKey] = useState<string | null>(null);
+  const [notice, setNotice] = useState<string | null>(null);
+
+  // Typing is debounced; loading an example or a file is checked at once.
+  const settled = useDebounced(source, mode === 'edit' ? config.playground.lintDelayMs : 0);
+  const result = useMemo(() => inspect(settled, fileName), [settled, fileName]);
+  const firstKey = result.findings[0] ? findingKey(result.findings[0]) : null;
+  const shownKey = openKey ?? firstKey;
+
+  const load = useCallback((next: string, name: string, id: string | null) => {
+    setSource(next);
+    setFileName(name);
+    setSampleId(id);
+    setRuleFilter(null);
+    setOpenKey(null);
+    setNotice(null);
+  }, []);
+
+  const onSample = (id: string) => {
+    const s = samples.find((x) => x.id === id);
+    if (s) load(s.source, s.fileName, s.id);
+  };
+
+  const onFile = async (file: File) => {
+    if (!file.name.toLowerCase().endsWith('.sol')) return setNotice(t('error.notSol'));
+    const max = config.playground.maxSourceBytes;
+    if (file.size > max) return setNotice(t('error.tooLarge', { kb: Math.floor(max / 1024) }));
+    try {
+      load(await readText(file), file.name, null);
+      setMode('inspect');
+    } catch {
+      setNotice(t('error.read'));
+    }
+  };
+
+  const onEdit = (next: string) => {
+    setSource(next);
+    if (sampleId !== null) {
+      setSampleId(null);
+      setFileName(UNTITLED);
+    }
+  };
 
   return (
-    <main style={{ fontFamily: "system-ui, sans-serif", maxWidth: 720, margin: "2rem auto", padding: "0 1rem" }}>
-      <h1>QoreChain EVM dApp</h1>
-      <ConnectButton />
-      <p>Latest block: {block?.toString() ?? "..."}</p>
-
-      {isConnected && address && chainId ? (
-        <section>
-          <p>
-            Account <code>{address}</code> on chain {chainId}
+    <>
+      <a className="skip" href="#source">
+        {t('skip')}
+      </a>
+      <Masthead />
+      <main className="bench">
+        <div className="work">
+          <Toolbar
+            sampleId={sampleId}
+            fileName={fileName}
+            mode={mode}
+            onSample={onSample}
+            onFile={onFile}
+            onMode={setMode}
+            onClear={() => {
+              load('', UNTITLED, null);
+              setMode('edit');
+            }}
+          />
+          {notice ? (
+            <p className="notice" role="alert">
+              {notice}
+            </p>
+          ) : null}
+          <SourceSheet
+            mode={mode}
+            source={mode === 'edit' ? source : settled}
+            fileName={fileName}
+            result={result}
+            ruleFilter={ruleFilter}
+            openKey={shownKey}
+            onToggleTag={(key) => setOpenKey(shownKey === key ? '' : key)}
+            onSourceChange={onEdit}
+            onDropFile={onFile}
+          />
+          <p className="private">
+            <LockIcon /> {t('sheet.private')}
           </p>
-          <p>Balance: {balance ? `${formatEther(balance.value)} QOR` : "..."}</p>
-          <WindowStatus address={address} chainId={chainId} />
-          <button type="button" disabled={send.isPending} onClick={() => send.sendTransaction({ to: address, value: 0n })}>
-            Send 0 QOR to yourself
-          </button>
-          {send.data && <p>Sent: {send.data}</p>}
-          {send.error && <p>Refused: {rejection ? REMEDY[rejection] : send.error.message}</p>}
-        </section>
-      ) : (
-        <p>Connect a wallet to read your account.</p>
-      )}
-    </main>
+        </div>
+        <Register result={result} empty={settled.trim() === ''} ruleFilter={ruleFilter} onFilter={setRuleFilter} />
+      </main>
+      <footer className="colophon">
+        <p>{t('footer.complement')}</p>
+        <p>{t('footer.credit')}</p>
+        <nav className="colophon__links">
+          <a href={config.links.rules}>{t('footer.rules')}</a>
+          <a href={config.links.repo}>{t('footer.source')}</a>
+          <span>{t('footer.license')}</span>
+        </nav>
+      </footer>
+    </>
   );
 }

@@ -1,0 +1,179 @@
+/* The inspection register: verdict, clearance stamp and one row per rule. */
+.register {
+  display: grid;
+  align-content: start;
+  gap: var(--space-3);
+}
+
+.register__title,
+.register__sub {
+  font-size: var(--step--1);
+  font-weight: 700;
+  font-variation-settings: "wdth" 80;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--on-bench-soft);
+}
+
+.register__sub {
+  margin-top: var(--space-2);
+}
+
+.verdict {
+  position: relative;
+  min-height: 6.5rem;
+  padding: var(--space-4);
+  border: 1px solid var(--bench-line);
+  border-radius: var(--radius-control);
+  background: var(--bench-raised);
+  overflow: hidden;
+}
+
+.verdict__big {
+  font-size: var(--step-2);
+  font-weight: 750;
+  font-variation-settings: "wdth" 104;
+  letter-spacing: -0.01em;
+  line-height: 1.15;
+}
+
+.verdict[data-state="fail"] .verdict__big {
+  color: #ff9a85;
+}
+
+.verdict[data-state="clear"] .verdict__big {
+  color: var(--green-on-bench);
+}
+
+.verdict__line {
+  color: var(--on-bench-soft);
+}
+
+.verdict[data-state="parse"] .verdict__line {
+  color: #ff9a85;
+  font-weight: 600;
+}
+
+.stamp {
+  position: absolute;
+  right: var(--space-3);
+  bottom: var(--space-3);
+  padding: 0.15em 0.5em;
+  border: 3px solid currentColor;
+  border-radius: 4px;
+  color: var(--green-on-bench);
+  font-size: var(--step-1);
+  font-weight: 850;
+  font-variation-settings: "wdth" 125;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  transform: rotate(-9deg);
+  opacity: 0.9;
+  animation: stamp 520ms var(--ease-out) both;
+}
+
+@keyframes stamp {
+  0% {
+    transform: rotate(-4deg) scale(1.9);
+    opacity: 0;
+  }
+  55% {
+    transform: rotate(-10deg) scale(0.94);
+    opacity: 1;
+  }
+  100% {
+    transform: rotate(-9deg) scale(1);
+    opacity: 0.9;
+  }
+}
+
+.rules {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-1);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.rule {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: var(--space-2);
+  width: 100%;
+  min-height: 2.5rem;
+  padding: 0 var(--space-3);
+  border: 1px solid var(--bench-line);
+  border-radius: var(--radius-control);
+  background: transparent;
+  text-align: left;
+  cursor: pointer;
+}
+
+.rule:disabled {
+  cursor: default;
+  color: var(--on-bench-soft);
+}
+
+.rule[data-hit] {
+  border-color: var(--manila-deep);
+}
+
+.rule[aria-pressed="true"] {
+  background: var(--manila);
+  color: var(--manila-ink);
+}
+
+.rule__id {
+  font-family: var(--font-code);
+  font-weight: 700;
+  font-size: var(--step--1);
+}
+
+.rule__name {
+  display: none;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-family: var(--font-code);
+  font-size: 0.75rem;
+}
+
+.rule__count {
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
+}
+
+.rule[data-hit] .rule__count {
+  color: var(--manila);
+}
+
+.rule[aria-pressed="true"] .rule__count {
+  color: inherit;
+}
+
+
+@media (min-width: 60rem) {
+  .register {
+    position: sticky;
+    top: var(--space-4);
+  }
+  .rules {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .rule__name {
+    display: block;
+  }
+}
+
+@media (max-width: 59.99rem) {
+  /* Small screens: the verdict and rule chips come first, then the sheet. */
+  .register {
+    order: -1;
+  }
+  .verdict {
+    min-height: 0;
+  }
+}

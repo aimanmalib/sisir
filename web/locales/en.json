@@ -1,0 +1,74 @@
+{
+  "meta": {
+    "title": "Sisir: post-quantum Solidity lint for QoreChain",
+    "description": "Paste a Solidity contract and see QoreChain post-quantum mistakes in your browser. Eight rules, each with the official docs."
+  },
+  "header": {
+    "tagline": "I check Solidity for QoreChain post-quantum mistakes. Everything runs in this browser.",
+    "language": "Language"
+  },
+  "lang": { "en": "EN", "ms": "BM", "enName": "English", "msName": "Bahasa Melayu" },
+  "toolbar": {
+    "label": "Source tools",
+    "example": "Example",
+    "upload": "Upload .sol",
+    "inspect": "Inspect",
+    "edit": "Edit",
+    "clear": "Clear"
+  },
+  "sample": {
+    "workshop-draft": "Workshop vault, draft",
+    "workshop-fixed": "Workshop vault, fixed"
+  },
+  "sheet": {
+    "label": "Source",
+    "editLabel": "Solidity source",
+    "placeholder": "Paste a Solidity contract here, or upload a .sol file.",
+    "empty": "Nothing to inspect yet. Paste a contract or pick an example.",
+    "drop": "Drop the .sol file to inspect it",
+    "private": "Your code stays in this browser. Nothing is sent anywhere.",
+    "lines": "{count} lines",
+    "lineFindings": "{count} findings on line {line}"
+  },
+  "register": {
+    "title": "Inspection",
+    "rules": "Rules",
+    "showRule": "Show only {id}",
+    "showAll": "Show all rules",
+    "none": "No findings for this rule"
+  },
+  "verdict": {
+    "clear": "No errors",
+    "stamp": "Cleared",
+    "errors": "{count} errors",
+    "error": "1 error",
+    "warnings": "{count} warnings",
+    "warning": "1 warning",
+    "parse": "I could not read this file as Solidity",
+    "empty": "Waiting for a contract"
+  },
+  "level": { "error": "Error", "warning": "Warning", "info": "Note" },
+  "tag": {
+    "line": "Line {line}",
+    "fix": "Fix",
+    "docs": "Official docs",
+    "close": "Close"
+  },
+  "parse": {
+    "title": "Parse error",
+    "where": "Line {line}, column {column}. The parser says:"
+  },
+  "error": {
+    "tooLarge": "This file is larger than {kb} KB. Open a smaller file.",
+    "notSol": "Choose a .sol file.",
+    "read": "I could not read that file."
+  },
+  "footer": {
+    "complement": "Sisir is a complement to the official auditor, not a replacement. The rules are syntax checks and miss things.",
+    "rules": "What each rule catches and misses",
+    "source": "Source code",
+    "license": "Apache-2.0",
+    "credit": "The examples are the workshop 2 audit vault from qorechain/build-before-qday (Apache-2.0)."
+  },
+  "skip": "Skip to the source"
+}
