@@ -12,7 +12,15 @@ export interface LowLevelCall {
   payload: Node | undefined;
 }
 
-export function asLowLevelCall(node: Node): LowLevelCall | undefined {
+/** A member call such as target.member{opt: v}(args), with its call options split out. */
+export interface MemberCall {
+  node: Node;
+  member: string;
+  target: Node;
+  options: ReadonlyMap<string, Node>;
+}
+
+export function asMemberCall(node: Node): MemberCall | undefined {
   if (node.type !== 'FunctionCall') return undefined;
   let callee = node.expression as Node;
   const options = new Map<string, Node>();
@@ -21,8 +29,28 @@ export function asLowLevelCall(node: Node): LowLevelCall | undefined {
     (list.names as string[]).forEach((name, i) => options.set(name, list.arguments[i] as Node));
     callee = callee.expression as Node;
   }
-  if (callee.type !== 'MemberAccess' || !KINDS.has(callee.memberName)) return undefined;
-  return { node, kind: callee.memberName as LowLevelKind, target: callee.expression as Node, options, payload: node.arguments[0] };
+  if (callee.type !== 'MemberAccess') return undefined;
+  return { node, member: callee.memberName as string, target: callee.expression as Node, options };
+}
+
+export function asLowLevelCall(node: Node): LowLevelCall | undefined {
+  const call = asMemberCall(node);
+  if (!call || !KINDS.has(call.member)) return undefined;
+  return { node, kind: call.member as LowLevelKind, target: call.target, options: call.options, payload: node.arguments[0] };
+}
+
+/** True when an expression is a literal zero, so a value option or transfer amount sends nothing. */
+export function isZero(expr: Node | undefined): boolean {
+  return expr?.type === 'NumberLiteral' && !expr.subdenomination && /^(0x)?0+$/.test(String(expr.number).replace(/_/g, ''));
+}
+
+/**
+ * The value a call sends: the value option of any member call, or the amount of address.transfer and
+ * address.send. Undefined when the call sends nothing or only a literal zero.
+ */
+export function sentValue(call: MemberCall): Node | undefined {
+  const amount = call.options.get('value') ?? (call.member === 'transfer' || call.member === 'send' ? (call.node.arguments[0] as Node) : undefined);
+  return amount && !isZero(amount) ? amount : undefined;
 }
 
 /**

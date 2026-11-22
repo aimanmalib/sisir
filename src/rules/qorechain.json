@@ -8,5 +8,12 @@
     "aiAnomalyCheck": "0x0000000000000000000000000000000000000b02",
     "prismConsensusParams": "0x0000000000000000000000000000000000000c01"
   },
-  "pqcKeyStatusFields": ["registered", "algorithmId", "pubkey", "possessionProven"]
+  "pqcKeyStatusFields": [
+    "registered",
+    "algorithmId",
+    "pubkey",
+    "possessionProven"
+  ],
+  "crossVmBridgeFunction": "executeCrossVMCall",
+  "bridgeSource": "https://docs.qorechain.io/developer-guide/cross-vm-reference"
 }

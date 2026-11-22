@@ -78,6 +78,15 @@ export function bodyBindings(body: Node, file: ReadonlyMap<string, Node>): Map<s
 
 const CONVERSIONS = new Set(['address', 'payable']);
 
+/** True when a call's callee is a type conversion such as address(x), bytes(x) or IQorePQC(x). */
+export function isConversion(callee: Node): boolean {
+  return (
+    callee.type === 'ElementaryTypeName' ||
+    callee.type === 'TypeNameExpression' ||
+    (callee.type === 'Identifier' && (CONVERSIONS.has(callee.name) || /^[A-Z]/.test(callee.name)))
+  );
+}
+
 /** Name of the QoreChain precompile an expression points at, when it can be read from the source. */
 export function resolvePrecompile(expr: unknown, bindings: ReadonlyMap<string, Node>, depth = 0): string | undefined {
   if (!isNode(expr) || depth > 8) return undefined;
@@ -93,12 +102,7 @@ export function resolvePrecompile(expr: unknown, bindings: ReadonlyMap<string, N
       return expr.components.length === 1 ? resolvePrecompile(expr.components[0], bindings, depth + 1) : undefined;
     case 'FunctionCall': {
       // Only type conversions such as address(x), payable(x) or IQorePQC(x).
-      const callee = expr.expression as Node;
-      const conversion =
-        callee.type === 'ElementaryTypeName' ||
-        callee.type === 'TypeNameExpression' ||
-        (callee.type === 'Identifier' && (CONVERSIONS.has(callee.name) || /^[A-Z]/.test(callee.name)));
-      if (!conversion || expr.arguments.length !== 1 || expr.names.length > 0) return undefined;
+      if (!isConversion(expr.expression as Node) || expr.arguments.length !== 1 || expr.names.length > 0) return undefined;
       return resolvePrecompile(expr.arguments[0], bindings, depth + 1);
     }
     default:
