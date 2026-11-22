@@ -12,6 +12,15 @@
     "repo": "https://github.com/aimanmalib/sisir",
     "rules": "https://github.com/aimanmalib/sisir/blob/main/docs/rules.md"
   },
+  "site": {
+    "url": "https://sisir.sasateguh.com",
+    "ogImage": "/og.png",
+    "ogImageWidth": 1200,
+    "ogImageHeight": 630,
+    "ogImageMaxBytes": 307200,
+    "twitterCard": "summary_large_image",
+    "locales": { "en": "en_US", "ms": "ms_MY" }
+  },
   "playground": {
     "lintDelayMs": 250,
     "maxSourceBytes": 262144,

@@ -1,7 +1,8 @@
 {
   "meta": {
     "title": "Sisir: post-quantum Solidity lint for QoreChain",
-    "description": "Paste a Solidity contract and see QoreChain post-quantum mistakes in your browser. Eight rules, each with the official docs."
+    "description": "Paste a Solidity contract and see QoreChain post-quantum mistakes in your browser. Eight rules, each with the official docs.",
+    "ogImageAlt": "The Sisir comb logo with the title and a one-line summary of the playground."
   },
   "header": {
     "tagline": "I check Solidity for QoreChain post-quantum mistakes. Everything runs in this browser.",

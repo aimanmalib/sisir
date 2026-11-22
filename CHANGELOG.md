@@ -24,6 +24,8 @@ contract is a new deployment, listed here with its new address.
 - Static site image with nginx, a deploy script with rollback, and a health watch.
 - README, `AI_USAGE.md`, contributing guide, security policy, code of conduct, and decision records in
   `docs/decisions/`.
+- Link preview card `web/public/og.png` (1200 x 630), drawn by `scripts/og-image.mjs` from the default language's
+  title and description, the colour tokens and the logo. The address and card size live in `config/app.json` `site`.
 
 ### Fixed
 
