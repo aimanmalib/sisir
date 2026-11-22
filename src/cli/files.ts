@@ -1,17 +1,23 @@
 import { readdir, stat } from 'node:fs/promises';
 import { isAbsolute, join, relative, resolve, sep } from 'node:path';
+import walkConfig from './walk.json' with { type: 'json' };
 
-/** Folders that never hold the user's own contracts. */
-const SKIP_DIRS = new Set(['node_modules', '.git', 'lib', 'out', 'cache', 'artifacts', 'dist']);
+/** Folders that never hold the user's own contracts, at any depth. */
+const ALWAYS_SKIP = new Set(walkConfig.alwaysSkip);
+/** Dependency and build folders of a toolchain: skipped only next to a root marker such as `foundry.toml`. */
+const ROOT_SKIP = new Set(walkConfig.rootSkip);
+const ROOT_MARKERS = new Set(walkConfig.rootMarkers);
 
 export class PathError extends Error {}
 
 async function walk(dir: string, out: string[]): Promise<void> {
   const entries = await readdir(dir, { withFileTypes: true });
+  const isRoot = entries.some((e) => e.isFile() && ROOT_MARKERS.has(e.name));
   for (const e of entries) {
     const full = join(dir, e.name);
     if (e.isDirectory()) {
-      if (!SKIP_DIRS.has(e.name)) await walk(full, out);
+      const skip = ALWAYS_SKIP.has(e.name) || (isRoot && ROOT_SKIP.has(e.name));
+      if (!skip) await walk(full, out);
     } else if (e.isFile() && e.name.endsWith('.sol')) {
       out.push(full);
     }

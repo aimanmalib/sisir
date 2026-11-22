@@ -46,22 +46,48 @@ describe('exit codes', () => {
 });
 
 describe('file discovery', () => {
-  it('walks folders, de-duplicates, and skips dependency and build folders', async () => {
+  /** Writes `files` (relative paths, folders made on the way) into a fresh temp folder and lints `args` there. */
+  async function lintTree(files: string[], args: string[]) {
     const dir = mkdtempSync(join(tmpdir(), 'sisir-files-'));
     try {
-      for (const sub of ['src/deep', 'node_modules/pkg', 'lib/forge-std', 'out']) mkdirSync(join(dir, sub), { recursive: true });
-      for (const f of ['src/A.sol', 'src/deep/B.sol', 'node_modules/pkg/C.sol', 'lib/forge-std/D.sol', 'out/E.sol', 'src/notes.txt']) {
-        writeFileSync(join(dir, f), 'contract Flagged {}\n');
+      for (const f of files) {
+        mkdirSync(join(dir, f, '..'), { recursive: true });
+        writeFileSync(join(dir, f), f.endsWith('.sol') ? 'contract Flagged {}\n' : '');
       }
       const io = captureIo(dir);
-      const code = await main(['-f', 'json', '.', 'src/A.sol'], io, options);
-      const body = JSON.parse(io.stdout);
-      expect(code).toBe(1);
-      expect(body.summary.files).toBe(2);
-      expect(body.findings.map((f: { file: string }) => f.file)).toEqual(['src/A.sol', 'src/deep/B.sol']);
+      const code = await main(['-f', 'json', ...args], io, options);
+      return { code, files: (JSON.parse(io.stdout).findings as { file: string }[]).map((f) => f.file) };
     } finally {
       rmSync(dir, { recursive: true, force: true });
     }
+  }
+
+  it('walks folders, de-duplicates, and skips dependency and build folders of a toolchain root', async () => {
+    const r = await lintTree(
+      ['foundry.toml', 'src/A.sol', 'src/deep/B.sol', 'node_modules/pkg/C.sol', 'lib/forge-std/D.sol', 'out/E.sol', 'src/notes.txt'],
+      ['.', 'src/A.sol'],
+    );
+    expect(r).toEqual({ code: 1, files: ['src/A.sol', 'src/deep/B.sol'] });
+  });
+
+  it('lints a lib folder of your own that is not a toolchain dependency folder', async () => {
+    const r = await lintTree(['foundry.toml', 'src/lib/Math.sol', 'lib/forge-std/D.sol'], ['.']);
+    expect(r.files).toEqual(['src/lib/Math.sol']);
+  });
+
+  it('lints lib and out when the folder holds no toolchain marker, but still skips node_modules', async () => {
+    const r = await lintTree(['contracts/lib/Math.sol', 'contracts/out/Gen.sol', 'contracts/node_modules/x/C.sol'], ['contracts']);
+    expect(r.files).toEqual(['contracts/lib/Math.sol', 'contracts/out/Gen.sol']);
+  });
+
+  it('skips a Hardhat project\'s artifacts and cache next to hardhat.config.ts', async () => {
+    const r = await lintTree(['hardhat.config.ts', 'contracts/V.sol', 'artifacts/A.sol', 'cache/C.sol'], ['.']);
+    expect(r.files).toEqual(['contracts/V.sol']);
+  });
+
+  it('lints a dependency folder you name yourself', async () => {
+    const r = await lintTree(['foundry.toml', 'lib/forge-std/D.sol'], ['lib']);
+    expect(r.files).toEqual(['lib/forge-std/D.sol']);
   });
 });
 

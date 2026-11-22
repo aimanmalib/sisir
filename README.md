@@ -30,6 +30,8 @@ npx github:aimanmalib/sisir contracts/
 ```
 
 npm installs Sisir from this repository and builds it on the way. Pass any mix of `.sol` files and folders.
+In a folder, Sisir skips `node_modules` and `.git`, and skips dependency and build folders such as `lib`, `out` and
+`artifacts` only next to `foundry.toml`, `hardhat.config.*` or `package.json`. Name a folder to lint it anyway.
 
 ```text
 Usage: sisir [options] <file-or-folder>...

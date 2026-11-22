@@ -1,0 +1,14 @@
+{
+  "$comment": "Folder walk. `alwaysSkip` folders are skipped at any depth. `rootSkip` folders are skipped only inside a toolchain root, a folder that holds one of `rootMarkers`, so a user's own `contracts/lib/` is still linted.",
+  "alwaysSkip": ["node_modules", ".git"],
+  "rootSkip": ["lib", "out", "cache", "cache_forge", "broadcast", "artifacts", "typechain-types", "dist", "build"],
+  "rootMarkers": [
+    "foundry.toml",
+    "hardhat.config.js",
+    "hardhat.config.ts",
+    "hardhat.config.cjs",
+    "hardhat.config.mjs",
+    "truffle-config.js",
+    "package.json"
+  ]
+}

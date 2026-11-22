@@ -29,3 +29,7 @@ contract is a new deployment, listed here with its new address.
 
 - S003 no longer flags a contract that decodes the raw `pqcKeyStatus` answer twice, for example the head first and
   the full answer after. All decodes of one answer are now judged together.
+- Folder scans no longer skip a `lib`, `out` or `build` folder of your own, such as `contracts/lib/Math.sol`. These
+  names are now skipped only inside a toolchain root (a folder with `foundry.toml`, `hardhat.config.*`,
+  `truffle-config.js` or `package.json`). `node_modules` and `.git` are still skipped everywhere. The lists live in
+  `src/cli/walk.json`.
