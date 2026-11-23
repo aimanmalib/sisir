@@ -1,0 +1,25 @@
+{
+  "name": "sisir-testnet",
+  "private": true,
+  "type": "module",
+  "description": "Account setup and anchoring for Sisir on the QoreChain testnet. Not part of the published CLI.",
+  "license": "Apache-2.0",
+  "engines": {
+    "node": ">=20.10"
+  },
+  "scripts": {
+    "native": "tsx native.ts",
+    "typecheck": "tsc -p tsconfig.json",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@qorechain/sdk": "0.14.0",
+    "viem": "2.53.1"
+  },
+  "devDependencies": {
+    "@types/node": "22.20.5",
+    "tsx": "4.21.0",
+    "typescript": "7.0.2",
+    "vitest": "5.1.1"
+  }
+}

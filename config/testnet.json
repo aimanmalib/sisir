@@ -1,0 +1,23 @@
+{
+  "rest": "https://api-testnet.qore.host",
+  "denom": "uqor",
+  "decimals": 6,
+  "gasPriceUqor": "0.15",
+  "gas": {
+    "send": 400000,
+    "registerKey": 500000
+  },
+  "waitSeconds": 90,
+  "pollSeconds": 2,
+  "accounts": {
+    "funder": 0,
+    "project": 10,
+    "keyless": 11
+  },
+  "funding": {
+    "amountQor": "5",
+    "fundBelowQor": "3",
+    "funderMinQor": "15"
+  },
+  "evidence": "evidence/testnet.json"
+}
