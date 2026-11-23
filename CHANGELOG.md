@@ -6,6 +6,12 @@ contract is a new deployment, listed here with its new address.
 
 ## [Unreleased]
 
+## [1.0.0] - 2026-11-23
+
+### Changed
+
+- CI pins `actions/checkout` v7.0.1 and `actions/setup-node` v7.1.0 by commit. Both run on Node 24.
+
 ### Fixed
 
 - The testnet setup creates `evidence/` before its first write, so the first transfer is always recorded.
@@ -54,3 +60,6 @@ contract is a new deployment, listed here with its new address.
   `src/cli/walk.json`.
 - The wallet dialogs in the playground now fit a 320 px browser window on a computer. RainbowKit gave such a window its
   desktop dialog, at least 368 px wide, so the right side was cut off. Phones keep RainbowKit's bottom sheet unchanged.
+
+[Unreleased]: https://github.com/aimanmalib/sisir/compare/v1.0.0...HEAD
+[1.0.0]: https://github.com/aimanmalib/sisir/releases/tag/v1.0.0
