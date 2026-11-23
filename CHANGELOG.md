@@ -12,6 +12,8 @@ contract is a new deployment, listed here with its new address.
 
 ### Added
 
+- `brand/sisir-cover.png`, the 1920 x 1080 cover image, drawn by `scripts/cover-image.mjs` from the site's colours,
+  fonts and a real playground screenshot. Size and byte limit live in `config/app.json` `cover`.
 - `SisirLedger` on `qorechain-diana` at `0xd457db8651842898ca63784dfc006b6d85dacc50` (block 10607847), set in
   `config/app.json`. Anchor 0 is the report of `fixtures/workshop`; the same anchor from the keyless account reverts
   with `NotQuantumReady`. Both are in `evidence/testnet.json`.

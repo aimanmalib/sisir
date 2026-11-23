@@ -3,7 +3,10 @@
     "siteName": "Sisir",
     "title": "Sisir: lint Solidity pasca-kuantum untuk QoreChain",
     "description": "Tampal kontrak Solidity dan lihat kesilapan pasca-kuantum QoreChain dalam pelayar anda. Lapan peraturan, setiap satu dengan dokumen rasmi.",
-    "ogImageAlt": "Logo sikat Sisir bersama tajuk dan ringkasan satu baris tentang laman ujian."
+    "ogImageAlt": "Logo sikat Sisir bersama tajuk dan ringkasan satu baris tentang laman ujian.",
+    "tagline": "Linter untuk Solidity QoreChain. Ia menangkap kesilapan pasca-kuantum sebelum anda deploy.",
+    "coverNote": "Lapan peraturan, setiap satu dipautkan ke dokumen rasmi QoreChain. Jalankan di terminal, dalam CI atau dalam pelayar.",
+    "coverBadge": "Quantum Pass · testnet QoreChain"
   },
   "header": {
     "tagline": "Saya menyemak Solidity untuk kesilapan pasca-kuantum QoreChain. Semuanya berjalan dalam pelayar ini.",

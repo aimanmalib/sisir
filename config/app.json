@@ -19,7 +19,10 @@
     "ogImageHeight": 630,
     "ogImageMaxBytes": 307200,
     "twitterCard": "summary_large_image",
-    "locales": { "en": "en_US", "ms": "ms_MY" }
+    "locales": {
+      "en": "en_US",
+      "ms": "ms_MY"
+    }
   },
   "playground": {
     "lintDelayMs": 250,
@@ -43,5 +46,12 @@
     "maxFeePerGasWei": "112500000000",
     "nativeGasLimit": 400000,
     "recentLimit": 5
+  },
+  "cover": {
+    "file": "brand/sisir-cover.png",
+    "width": 1920,
+    "height": 1080,
+    "maxBytes": 5242880,
+    "screenshot": "docs/images/screenshot-desktop.png"
   }
 }
