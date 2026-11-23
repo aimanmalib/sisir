@@ -8,6 +8,8 @@ contract is a new deployment, listed here with its new address.
 
 ### Added
 
+- Testnet setup in `scripts/testnet`: one transfer of gas money to the project account, its ML-DSA-87 key with
+  proof of possession, and a status view. Values in `config/testnet.json`, record in `evidence/testnet.json`.
 - `sisir` CLI: lints `.sol` files and folders, prints text, `JSON` or `SARIF` 2.1.0, and exits 1 on error-level
   findings and 2 on a parse or usage error. Installs from GitHub with `npx github:aimanmalib/sisir`.
 - Eight rules, S001 to S008, for QoreChain's post-quantum precompiles and Cross-VM bridge, each with the official page
