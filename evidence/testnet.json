@@ -1,0 +1,30 @@
+{
+  "network": "qorechain-diana",
+  "accounts": {
+    "project": {
+      "cosmos": "qor1xhftqs040zm2vfmgrckmeyg5qk4504gr2kx7es",
+      "evm": "0x35D2B041f578b6A627681e2dbc911405aB47d503"
+    },
+    "keyless": {
+      "cosmos": "qor1dwc322a3wg8wm0gwwafcwnmca7pwwltghny2g2",
+      "evm": "0x6BB1152BB1720EEDBD0e7753874F78eF82E77d68"
+    }
+  },
+  "keys": {
+    "project": {
+      "tx": "623FAF6DB62E932F0555F5C8C9BF0919152512636541CF08DCB9E82F10D5E861",
+      "height": 10607084,
+      "gasUsed": 299281
+    }
+  },
+  "anchors": [],
+  "funding": {
+    "tx": "911208A53AD34A89D96F07A0884FF7AEA0E5238EC1797A1AE51452240AF88E9C",
+    "height": 10607001,
+    "gasUsed": 201171,
+    "from": "qor1nhh5zsnhyag9f06ct6hpe34yk2m8xputtw4t63",
+    "to": "qor1xhftqs040zm2vfmgrckmeyg5qk4504gr2kx7es",
+    "amount": "5000000",
+    "denom": "uqor"
+  }
+}
