@@ -17,7 +17,43 @@
       "gasUsed": 299281
     }
   },
-  "anchors": [],
+  "anchors": [
+    {
+      "expect": "revert",
+      "account": "keyless",
+      "from": "0x6BB1152BB1720EEDBD0e7753874F78eF82E77d68",
+      "target": "fixtures/workshop",
+      "files": [
+        "QDayVault_v0_buggy.sol",
+        "QDayVault_v1_fixed.sol"
+      ],
+      "reportHash": "0x9f7a51026334ed055168741de5aa20bfa3e95096af3e5f7f2f05cc91aa13a237",
+      "sourceHash": "0x4188df0d539ce2d65dc6ed932b5ee41a4278f874a3f78e770f01717bef58745d",
+      "findings": 2,
+      "method": "eth_call",
+      "reason": "NotQuantumReady",
+      "revertData": "0x592071690000000000000000000000006bb1152bb1720eedbd0e7753874f78ef82e77d68",
+      "height": 10607871
+    },
+    {
+      "expect": "success",
+      "account": "project",
+      "from": "0x35D2B041f578b6A627681e2dbc911405aB47d503",
+      "target": "fixtures/workshop",
+      "files": [
+        "QDayVault_v0_buggy.sol",
+        "QDayVault_v1_fixed.sol"
+      ],
+      "reportHash": "0x9f7a51026334ed055168741de5aa20bfa3e95096af3e5f7f2f05cc91aa13a237",
+      "sourceHash": "0x4188df0d539ce2d65dc6ed932b5ee41a4278f874a3f78e770f01717bef58745d",
+      "findings": 2,
+      "id": "0",
+      "evm_tx": "0xb3befb410e8f3bb490e546494cb9d475d650161776740c0110a0313d88d0f343",
+      "cosmos_tx": "A16A3BC1071F757CD5AD75E0133443CC7A6849FA0F11D8E6AADF1CAD432CF8A7",
+      "height": 10607876,
+      "gasUsed": 187051
+    }
+  ],
   "funding": {
     "tx": "911208A53AD34A89D96F07A0884FF7AEA0E5238EC1797A1AE51452240AF88E9C",
     "height": 10607001,
@@ -26,5 +62,13 @@
     "to": "qor1xhftqs040zm2vfmgrckmeyg5qk4504gr2kx7es",
     "amount": "5000000",
     "denom": "uqor"
+  },
+  "ledger": {
+    "address": "0xd457db8651842898ca63784dfc006b6d85dacc50",
+    "evm_tx": "0xbcf4b982860572222c756b730f6885ab6c93ca1705ea50aed56d0ed56023365b",
+    "cosmos_tx": "8DF58F8ACB0C1D1B5BF4C38196066F4075ACB9D845E228B204210F75F8EA5736",
+    "height": 10607847,
+    "gasUsed": 455003,
+    "codeHash": "0xbb0973b47bfe5fd5dd398d63163c90e925a42749ca69d76266be8cad697a282d"
   }
 }

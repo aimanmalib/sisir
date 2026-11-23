@@ -6,7 +6,7 @@
     "nativeId": "qorechain-diana"
   },
   "contracts": {
-    "sisirLedger": ""
+    "sisirLedger": "0xd457db8651842898ca63784dfc006b6d85dacc50"
   },
   "links": {
     "repo": "https://github.com/aimanmalib/sisir",
