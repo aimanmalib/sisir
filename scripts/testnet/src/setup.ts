@@ -9,6 +9,8 @@ import {
   type SignBytesVersion,
   type UnifiedAccount,
 } from '@qorechain/sdk';
+import type { Hex } from 'viem';
+import { privateKeyToAccount } from 'viem/accounts';
 import { feeFor, fromBase, toBase, type GasKind, type Role, type TestnetConfig } from './config.js';
 import type { Evidence, TxRecord } from './evidence.js';
 import type { Lane } from './lane.js';
@@ -30,7 +32,18 @@ export interface SignRequest {
   classical: boolean;
 }
 
-/** One account the setup acts for. The keys stay inside `sign`. */
+/** One EVM transaction (EIP-1559, no value). No `to` deploys `data` as creation code. */
+export interface EvmTxRequest {
+  chainId: number;
+  nonce: number;
+  to?: Hex;
+  data: Hex;
+  gas: bigint;
+  maxFeePerGas: bigint;
+  maxPriorityFeePerGas: bigint;
+}
+
+/** One account the setup acts for. The keys stay inside `sign` and `signEvm`. */
 export interface Actor {
   role: Role;
   cosmos: string;
@@ -39,6 +52,8 @@ export interface Actor {
   ecdsaPubkey: Uint8Array;
   pqc: PqcKeypair;
   sign(r: SignRequest): Uint8Array;
+  /** Sign an EVM transaction with the account's secp256k1 key; returns the serialized bytes. */
+  signEvm(tx: EvmTxRequest): Promise<Hex>;
 }
 
 /** An actor for a unified eth-native account, signed through the SDK's eth-native signer. */
@@ -47,6 +62,8 @@ export function actorFrom(role: Role, account: UnifiedAccount, chainId: string, 
     new EthNativeSigner(account, { signMode: mode, signBytesVersion: version });
   const hybrid = signer('hybrid');
   const classical = signer('classical');
+  const evmKey = privateKeyToAccount(account.privateKey as Hex);
+  if (evmKey.address.toLowerCase() !== account.evm.toLowerCase()) throw new Error(`${role}: EVM key does not match ${account.evm}`);
   return {
     role,
     cosmos: account.cosmos,
@@ -61,6 +78,7 @@ export function actorFrom(role: Role, account: UnifiedAccount, chainId: string, 
         accountNumber: r.accountNumber,
         sequence: r.sequence,
       }).txRawBytes,
+    signEvm: (tx) => evmKey.signTransaction({ type: 'eip1559', value: 0n, ...tx }),
   };
 }
 
@@ -71,7 +89,7 @@ export interface Ctx {
   log: (line: string) => void;
 }
 
-async function send(ctx: Ctx, actor: Actor, messages: SignRequest['messages'], kind: GasKind, classical: boolean): Promise<TxRecord> {
+export async function send(ctx: Ctx, actor: Actor, messages: SignRequest['messages'], kind: GasKind, classical: boolean): Promise<TxRecord> {
   const acct = await ctx.lane.account(actor.cosmos);
   if (!acct) throw new Error(`${actor.role} ${actor.cosmos} is not on chain yet (no funds)`);
   const fee = feeFor(ctx.config, kind, messages.length);

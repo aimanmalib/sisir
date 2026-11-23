@@ -53,7 +53,7 @@ describe('amounts', () => {
   });
 
   it('prices a fee from the gas limit and price, rounded up', () => {
-    const c = checkTestnetConfig({ ...raw(), gasPriceUqor: '0.15', gas: { send: 3, registerKey: 10 } });
+    const c = checkTestnetConfig({ ...raw(), gasPriceUqor: '0.15', gas: { send: 3, registerKey: 10, openWindow: 1 } });
     expect(feeFor(c, 'send')).toEqual({ amount: [{ denom: c.denom, amount: '1' }], gas: '3' });
     expect(feeFor(c, 'registerKey', 2).amount[0]!.amount).toBe('3');
   });

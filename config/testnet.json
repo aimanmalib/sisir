@@ -5,7 +5,8 @@
   "gasPriceUqor": "0.15",
   "gas": {
     "send": 400000,
-    "registerKey": 500000
+    "registerKey": 500000,
+    "openWindow": 400000
   },
   "waitSeconds": 90,
   "pollSeconds": 2,
@@ -18,6 +19,12 @@
     "amountQor": "5",
     "fundBelowQor": "3",
     "funderMinQor": "15"
+  },
+  "ledger": {
+    "artifact": "contracts/out/SisirLedger.sol/SisirLedger.json",
+    "deployGas": 700000,
+    "priorityFeeWei": "12500000000",
+    "defaultTarget": "fixtures/workshop"
   },
   "evidence": "evidence/testnet.json"
 }

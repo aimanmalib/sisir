@@ -20,12 +20,47 @@ export interface FundingRecord extends TxRecord {
   denom: string;
 }
 
+/** SisirLedger as deployed: the EVM deployment and the Native-lane window that admitted it. */
+export interface LedgerRecord {
+  address: string;
+  evm_tx: string;
+  cosmos_tx: string;
+  height: number;
+  gasUsed: number;
+  /** keccak256 of the runtime code read back from the chain. */
+  codeHash: string;
+}
+
+/**
+ * One anchor case. `success`: a sent transaction (`evm_tx` and the window `cosmos_tx`). `revert`: the same call from
+ * the keyless account, answered by the ledger through `eth_call` at `height`.
+ */
+export interface AnchorRecord {
+  expect: 'success' | 'revert';
+  account: string;
+  from: string;
+  target: string;
+  files: string[];
+  reportHash: string;
+  sourceHash: string;
+  findings: number;
+  height: number;
+  id?: string;
+  evm_tx?: string;
+  cosmos_tx?: string;
+  gasUsed?: number;
+  method?: 'eth_call';
+  reason?: string;
+  revertData?: string;
+}
+
 export interface Evidence {
   network: string;
   accounts: Record<string, { cosmos: string; evm: string }>;
   funding?: FundingRecord;
   keys: Record<string, TxRecord>;
-  anchors: unknown[];
+  ledger?: LedgerRecord;
+  anchors: AnchorRecord[];
 }
 
 export function emptyEvidence(network: string): Evidence {

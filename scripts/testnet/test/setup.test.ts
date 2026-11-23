@@ -41,6 +41,9 @@ function stubActor(role: Role, cosmos: string): Actor {
     ecdsaPubkey: new Uint8Array(33),
     pqc: { publicKey: new Uint8Array(2592), secretKey: new Uint8Array(4896) },
     sign: (req) => new TextEncoder().encode(JSON.stringify({ from: cosmos, req }, (_, v) => (typeof v === 'bigint' ? v.toString() : v))),
+    signEvm: async () => {
+      throw new Error('the account setup never signs an EVM transaction');
+    },
   };
 }
 
