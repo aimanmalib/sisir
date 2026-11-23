@@ -1,4 +1,5 @@
-import { existsSync, readFileSync, renameSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdirSync, readFileSync, renameSync, writeFileSync } from 'node:fs';
+import { dirname } from 'node:path';
 
 /**
  * evidence/testnet.json: the public record of what Sisir sent on the testnet. It holds addresses, amounts, heights
@@ -39,8 +40,12 @@ export function readEvidence(path: string, network: string): Evidence {
   return { ...emptyEvidence(network), ...e } as Evidence;
 }
 
-/** Write through a temporary file and a rename, so a stopped run never leaves half a file. */
+/**
+ * Write through a temporary file and a rename, so a stopped run never leaves half a file. The folder is created on
+ * the first write: the first `fund` sends before anything else exists, and its record must not be lost.
+ */
 export function writeEvidence(path: string, e: Evidence): void {
+  mkdirSync(dirname(path), { recursive: true });
   const tmp = `${path}.tmp-${process.pid}`;
   writeFileSync(tmp, JSON.stringify(e, null, 2) + '\n');
   renameSync(tmp, path);
