@@ -12,6 +12,11 @@ contract is a new deployment, listed here with its new address.
 
 ### Added
 
+- `SisirLedger` on `qorechain-diana` at `0xd457db8651842898ca63784dfc006b6d85dacc50` (block 10607847), set in
+  `config/app.json`. Anchor 0 is the report of `fixtures/workshop`; the same anchor from the keyless account reverts
+  with `NotQuantumReady`. Both are in `evidence/testnet.json`.
+- `npm run native -- deploy` and `npm run native -- anchor [path]` in `scripts/testnet`, each EVM transaction through
+  a one-transaction EVM window.
 - Testnet setup in `scripts/testnet`: one transfer of gas money to the project account, its ML-DSA-87 key with
   proof of possession, and a status view. Values in `config/testnet.json`, record in `evidence/testnet.json`.
 - `evidence/testnet.json`: the project account's funding transfer and its registered ML-DSA-87 key on

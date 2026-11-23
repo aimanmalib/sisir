@@ -147,8 +147,20 @@ accepts an account that is quantum-ready: it reads `pqcKeyStatus` and requires b
 latest anchors for reading. It has no owner, no pause, no upgrade and no payable function. Sisir reports no findings
 on it.
 
-SisirLedger is not on the testnet yet. Until its address is in [`config/app.json`](config/app.json), the anchor
-buttons in the playground are off and the page says why.
+On the QoreChain testnet (`qorechain-diana`, EVM chain id 9800) I deployed it from the project account
+`0x35D2B041f578b6A627681e2dbc911405aB47d503`, which holds an ML-DSA-87 key with proof of possession:
+
+| What | Value |
+|---|---|
+| SisirLedger | `0xd457db8651842898ca63784dfc006b6d85dacc50`, block 10607847, tx `0xbcf4b982…23365b` |
+| Anchor 0 | `fixtures/workshop` (2 files, 2 findings), block 10607876, tx `0xb3befb41…d0f343` |
+| Refused | the same anchor from `0x6BB1152BB1720EEDBD0e7753874F78eF82E77d68`, an account with no key: `NotQuantumReady` |
+
+Each EVM transaction went through an EVM access window for one transaction, opened by a hybrid-signed
+`MsgOpenEVMWindow`. The anchor's window allowed the ledger address only. Full hashes, heights and gas used are in
+[`evidence/testnet.json`](evidence/testnet.json). The refusal is an `eth_call` at block 10607871, because an account
+with no key cannot open a window to send a transaction at all.
+[`scripts/testnet`](scripts/testnet) did all of it ([decision 0013](docs/decisions/0013-ledger-deploy-and-anchor.md)).
 
 ## Tests
 
@@ -158,6 +170,7 @@ buttons in the playground are off and the page says why.
 | Playground (vitest) | 23 | components, the Malay and English text, code highlighting, the window message bytes |
 | Playground end to end (Playwright) | 4 | the anchor flow in Chromium against the QoreX test wallet and a fake chain, for the wallet as it is today and as planned |
 | SisirLedger (Foundry) | 14 | a quantum-ready account, no proof, no key, an empty, missing or reverting precompile, the latest list, and fuzzed hashes and accounts |
+| Testnet setup (vitest) | 47 | funding once, the key registration, the deploy and anchor steps against an in-memory chain for both lanes, the keyless refusal |
 
 The numbers are from the last full run of [`scripts/gerbang-ujian.sh`](scripts/gerbang-ujian.sh), which CI runs. It
 also type-checks, builds the playground and scans the history for secrets.
