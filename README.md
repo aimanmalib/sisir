@@ -208,10 +208,14 @@ the fest. Every change since then is in the history, in small commits, with a de
   (Apache-2.0). The source commit and file hashes are in [`fixtures/workshop/README.md`](fixtures/workshop/README.md).
 - The playground starts from [`create-qorechain-dapp`](https://www.npmjs.com/package/create-qorechain-dapp) 0.14.0 and
   uses the QoreChain kits `@qorechain/evm`, `@qorechain/qorex-rainbowkit` and `@qorechain/qorex-types`, with
-  `@qorechain/qorex-wallet-mock` in tests.
+  `@qorechain/qorex-wallet-mock` in tests. The testnet scripts use `@qorechain/sdk`.
 - [`@solidity-parser/parser`](https://github.com/solidity-parser/parser) (MIT) parses the Solidity.
 - [RainbowKit](https://rainbowkit.com), [wagmi](https://wagmi.sh), [viem](https://viem.sh), React and Vite run the
   playground. [Foundry](https://getfoundry.sh) builds and tests the contract.
+- The fonts are [Archivo](https://fonts.google.com/specimen/Archivo) and
+  [JetBrains Mono](https://www.jetbrains.com/lp/mono/) (both SIL Open Font License 1.1), served from Fontsource packages.
+- The music in the demo video is by Sascha Ende, [ende.app](https://ende.app) (CC BY 4.0). The narration is an AI clone of
+  my own voice (see [`AI_USAGE.md`](AI_USAGE.md)).
 - The `SARIF` 2.1.0 schema used in tests is the official schema, copied unchanged (see `NOTICE`).
 
 Full notices are in [`NOTICE`](NOTICE). Other packages keep their own licences and are listed with their versions in
