@@ -74,6 +74,14 @@ step "unit tests"; strict vitest "vitest" npx --no-install vitest run
 step "cli smoke"
 node dist/cli.js --version >/dev/null || fail "dist/cli.js does not run"
 
+# Testnet account setup (scripts/testnet) has its own lockfile, so the published CLI never installs the chain SDK.
+# Its tests use an in-memory chain and a fake REST endpoint; nothing here touches the testnet.
+if [ -f scripts/testnet/package.json ]; then
+  [ -d scripts/testnet/node_modules ] || { step "testnet npm ci"; (cd scripts/testnet && npm ci --no-audit --no-fund) >"$tmp/testnet-npm.log" 2>&1 || { tail -n 30 "$tmp/testnet-npm.log"; fail "testnet npm ci failed"; }; }
+  step "testnet typecheck"; (cd scripts/testnet && npx --no-install tsc -p tsconfig.json) || fail "testnet typecheck failed"
+  step "testnet tests";     strict vitest "testnet vitest" env -C scripts/testnet npx --no-install vitest run
+fi
+
 # The playground in web/ bundles the same rule engine (src/rules) and has its own lockfile.
 if [ -f web/package.json ]; then
   [ -d web/node_modules ] || { step "web npm ci"; (cd web && npm ci --no-audit --no-fund) >"$tmp/web-npm.log" 2>&1 || { tail -n 30 "$tmp/web-npm.log"; fail "web npm ci failed"; }; }
