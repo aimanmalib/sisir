@@ -75,3 +75,7 @@ I am a solo builder. These parts are mine and are not delegated to an agent:
 
 The narration in the demo video is a clone of my own voice, made with ElevenLabs, and the end card says so. Its music is
 by Sascha Ende, ende.app (CC BY 4.0).
+
+The voice reads a few words in a respelled form so they come out right, for example "F.A.Q." and "C.I.". The captions
+keep the real spelling. A speech-to-text pass on the final mix matches the script word for word except for the names.
+It writes "Sisir" as "CCER", "QoreChain" as "Corchain" and "QoreX" as "CoreX", because it does not know those words.
